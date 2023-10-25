@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { waitFor } from '@testing-library/react';
 import renderWithRouter from '../helpers/renderWithRouter';
 import Login from '../components/Login';
+import Header from '../components/Header';
 
 test('Tela de Login', async () => {
   const { getByTestId } = renderWithRouter(<Login />);
@@ -19,4 +20,26 @@ test('Tela de Login', async () => {
   const btn = getByTestId('login-submit-btn');
   await user.click(btn);
   waitFor(() => expect(btn).not.toBeDisabled());
+});
+
+test('tela de login Header', async () => {
+  const { getByTestId, getByRole } = renderWithRouter(<Header />, { route: '/meals' });
+  const user = userEvent;
+
+  const imgProfile = getByTestId('profile-top-btn');
+  expect(imgProfile).toBeInTheDocument();
+
+  const btnSearch = getByTestId('search-top-btn');
+  expect(btnSearch).toBeInTheDocument();
+
+  const titulo = getByRole('heading', { name: /meals/i });
+  expect(titulo).toBeInTheDocument();
+
+  await user.click(btnSearch);
+
+  const searchInput = getByTestId('search-input');
+  expect(searchInput).toBeInTheDocument();
+
+  await user.click(btnSearch);
+  expect(searchInput).not.toBeInTheDocument();
 });
