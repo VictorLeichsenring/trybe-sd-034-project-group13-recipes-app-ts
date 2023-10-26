@@ -19,7 +19,7 @@ export function getEndpoint({
   searchType: type,
   query: qry }: EndpointParams): string {
   if (type === 'first-letter' && qry.length > 1) {
-    window.alert('Your search must contain only 1 (one) letter');
+    window.alert('Your search must have only 1 (one) character');
     return '';
   }
 
@@ -29,7 +29,8 @@ export function getEndpoint({
 
 async function fetchData(endpoint: EndpointType) {
   const response = await fetch(endpoint);
-  return response.json();
+  const data = await response.json();
+  return data;
 }
 
 export default fetchData;

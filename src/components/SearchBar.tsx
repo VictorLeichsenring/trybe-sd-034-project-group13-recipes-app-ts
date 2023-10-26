@@ -27,12 +27,22 @@ function SearchBar() {
     if (!endpoint) return;
 
     const data = await fetchData(endpoint);
-    providerValue.setRecipes(data);
 
-    // if (location.pathname === '/meals'
-    // && data.meals === null) {
-    //   window.alert(mensagem);
-    // }
+    const pathnameComBarra = location.pathname;
+    const pathnameSemBarra = pathnameComBarra.replace('/', '');
+
+    if (data[pathnameSemBarra]) {
+      if (data[pathnameSemBarra].length > 12) {
+        providerValue.setRecipes(data[pathnameSemBarra].slice(0, 12));
+      }
+
+      if (data[pathnameSemBarra].length > 0 && data[pathnameSemBarra].length < 12) {
+        providerValue.setRecipes(data[pathnameSemBarra]);
+      }
+    }
+    if (!data[pathnameSemBarra]) {
+      window.alert("Sorry, we haven't found any recipes for these filters.");
+    }
 
     if (location.pathname === '/meals'
     && data.meals
@@ -52,7 +62,6 @@ function SearchBar() {
         value={ query }
         onChange={ (e) => setQuery(e.target.value) }
       />
-
       <label htmlFor="ingredient">Ingredient</label>
       <input
         type="radio"

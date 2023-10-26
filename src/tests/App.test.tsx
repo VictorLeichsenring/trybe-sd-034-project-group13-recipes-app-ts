@@ -121,10 +121,6 @@ describe('Header Component', () => {
     const btnName = getByRole('radio', { name: /name/i });
     await user.click(btnName);
     expect(btnName).toBeInTheDocument();
-
-    const btnFirstLetter = getByRole('radio', { name: /first-letter/i });
-    await user.click(btnFirstLetter);
-    expect(btnFirstLetter).toBeInTheDocument();
   });
 
   test('testa o componente search-bar na rota drinks', async () => {

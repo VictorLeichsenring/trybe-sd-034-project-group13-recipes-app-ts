@@ -6,11 +6,10 @@ function Drinks() {
   const { providerValue } = useContext(RecipeContext);
 
   return (
-
     <div>
       <div>
-        {providerValue.recipes.drinks.length !== 0
-        && providerValue.recipes.drinks.map((recipe: any, index: any) => (
+        {providerValue.recipes.length !== 0
+        && providerValue.recipes.map((recipe: any, index: any) => (
           <Recipes
             key={ recipe.idDrink }
             image={ recipe.strDrinkThumb }

@@ -8,8 +8,8 @@ function Meals() {
   return (
     <div>
       <div>
-        {providerValue.recipes.meals.length !== 0
-        && providerValue.recipes.meals.map((recipe: any, index: any) => (
+        {providerValue.recipes.length !== 0
+        && providerValue.recipes.map((recipe: any, index: any) => (
           <Recipes
             key={ recipe.idMeal }
             image={ recipe.strMealThumb }
