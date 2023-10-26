@@ -122,7 +122,7 @@ describe('Header Component', () => {
     await user.click(btnName);
     expect(btnName).toBeInTheDocument();
 
-    const btnFirstLetter = getByRole('radio', { name: /first letter/i });
+    const btnFirstLetter = getByRole('radio', { name: /first-letter/i });
     await user.click(btnFirstLetter);
     expect(btnFirstLetter).toBeInTheDocument();
   });
