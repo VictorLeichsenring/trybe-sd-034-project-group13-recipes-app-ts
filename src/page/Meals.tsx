@@ -1,19 +1,16 @@
 import { useContext } from 'react';
-
-import RecipeCard from '../components/RecipeCard';
 import RecipeContext from '../context/RecipeContext';
+import Recipes from '../components/Recipes';
 
 function Meals() {
-  // const [recipes, setRecipes] = useState<Array<any>>([]);
   const { providerValue } = useContext(RecipeContext);
 
   return (
     <div>
-      <h1>Meals</h1>
       <div>
-        {providerValue.recipes.length !== 0
-        && providerValue.recipes.meals.slice(0, 12).map((recipe: any, index: any) => (
-          <RecipeCard
+        {providerValue.recipes.meals.length !== 0
+        && providerValue.recipes.meals.map((recipe: any, index: any) => (
+          <Recipes
             key={ recipe.idMeal }
             image={ recipe.strMealThumb }
             name={ recipe.strMeal }

@@ -12,7 +12,6 @@ function SearchBar() {
   const { providerValue } = useContext(RecipeContext);
   const [searchType, setSearchType] = useState<SearchType>('ingredient');
   const [query, setQuery] = useState('');
-  const [searchResults, setSearchResults] = useState(null);
 
   const navigate = useNavigate();
 
@@ -28,9 +27,12 @@ function SearchBar() {
     if (!endpoint) return;
 
     const data = await fetchData(endpoint);
-    setSearchResults(data);
     providerValue.setRecipes(data);
-    console.log(searchResults);
+
+    // if (location.pathname === '/meals'
+    // && data.meals === null) {
+    //   window.alert(mensagem);
+    // }
 
     if (location.pathname === '/meals'
     && data.meals
@@ -56,7 +58,6 @@ function SearchBar() {
         type="radio"
         id="ingredient"
         value="ingredient"
-          // name="search-bar"
         data-testid="ingredient-search-radio"
         checked={ searchType === 'ingredient' }
         onChange={ () => setSearchType('ingredient') }
@@ -66,7 +67,6 @@ function SearchBar() {
         type="radio"
         id="name"
         value="name"
-          // name="search-bar"
         data-testid="name-search-radio"
         checked={ searchType === 'name' }
         onChange={ () => setSearchType('name') }
@@ -76,7 +76,6 @@ function SearchBar() {
         type="radio"
         id={ FIRST_LETTER }
         value={ FIRST_LETTER }
-          // name="search-bar"
         data-testid="first-letter-search-radio"
         checked={ searchType === FIRST_LETTER }
         onChange={ () => setSearchType(FIRST_LETTER) }

@@ -1,13 +1,13 @@
 // RecipeCard.tsx
 import React from 'react';
 
-interface RecipeCardProps {
+interface RecipesProps {
   image: string;
   name: string;
   index: number;
 }
 
-function RecipeCard({ image, name, index }: RecipeCardProps) {
+function Recipes({ image, name, index }: RecipesProps) {
   return (
     <div
       data-testid={ `${index}-recipe-card` }
@@ -23,4 +23,4 @@ function RecipeCard({ image, name, index }: RecipeCardProps) {
   );
 }
 
-export default RecipeCard;
+export default Recipes;
