@@ -1,6 +1,7 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { waitFor } from '@testing-library/react';
+import { vi } from 'vitest';
+import { fireEvent, waitFor } from '@testing-library/react';
 import renderWithRouter from '../helpers/renderWithRouter';
 import Login from '../components/Login';
 import Header from '../components/Header';
@@ -142,9 +143,11 @@ describe('Header Component', () => {
     const searchInput = getByTestId('search-input');
     await user.type(searchInput, 'teste');
     expect(searchInput).toBeInTheDocument();
+    fireEvent.change(searchInput, { target: { value: 'rice' } });
 
     const radioIngredient = getByTestId('ingredient-search-radio');
     expect(radioIngredient).toBeInTheDocument();
+    fireEvent.change(radioIngredient, { target: { value: 'ingredient' } });
 
     const radioName = getByTestId('name-search-radio');
     expect(radioName).toBeInTheDocument();
@@ -155,5 +158,8 @@ describe('Header Component', () => {
     const btnSearchBar = getByTestId('exec-search-btn');
     await user.click(btnSearchBar);
     expect(btnSearchBar).toBeInTheDocument();
+
+    const filterButton = getByRole('button', { name: 'Buscar' });
+    fireEvent.click(filterButton);
   });
 });
