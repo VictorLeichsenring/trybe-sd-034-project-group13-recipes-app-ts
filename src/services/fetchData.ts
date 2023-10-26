@@ -28,22 +28,6 @@ export function getEndpoint({
 }
 
 async function fetchData(endpoint: EndpointType) {
-  // try {
-  //   const response = await fetch(endpoint);
-  //   if (!response.ok) {
-  //     throw new Error('Network response was not ok');
-  //   }
-  //   const data = await response.json();
-  //   if (!data) {
-  //     throw new Error("Sorry, we haven't found any recipes for these filters");
-  //   }
-  //   if (data.length > 12) {
-  //     return data.slice(0, 12);
-  //   }
-  //   return data;
-  // } catch (error: any) {
-  //   window.alert(error.message);
-  // }
   const response = await fetch(endpoint);
   return response.json();
 }
