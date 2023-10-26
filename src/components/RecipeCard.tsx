@@ -13,6 +13,7 @@ function RecipeCard({ image, name, index }: RecipeCardProps) {
       data-testid={ `${index}-recipe-card` }
     >
       <img
+        width="200px"
         src={ image }
         alt={ name }
         data-testid={ `${index}-card-img` }

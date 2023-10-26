@@ -15,3 +15,10 @@ export type EndpointType = string;
 export type SearchBarProps = {
   onSearch: (data: any) => void;
 };
+
+export type RecipeContextType = {
+  providerValue: {
+    recipes: any,
+    setRecipes: (data: any) => void,
+  }
+};
