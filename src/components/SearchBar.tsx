@@ -11,6 +11,7 @@ function SearchBar() {
   const location:LocationType = useLocation();
   const [searchType, setSearchType] = useState<SearchType>('ingredient');
   const [query, setQuery] = useState('');
+  const [searchResults, setSearchResults] = useState(null);
 
   const navigate = useNavigate();
   const FIRST_LETTER = 'first-letter';
@@ -55,7 +56,8 @@ function SearchBar() {
     if (!endpoint) return;
 
     const data = await fetchData(endpoint);
-    console.log(data);
+    setSearchResults(data);
+    console.log(searchResults);
 
     if (location.pathname === '/meals'
     && data.meals
