@@ -1,8 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { SearchBar } from './SearchBar';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
-import SearchBar from './SearchBar';
 
 function Header() {
   const location = useLocation();
@@ -43,6 +43,7 @@ function Header() {
       {search && (
         <button
           type="button"
+          placeholder="Search Recipe"
           onClick={ () => setInputSearch(!inputSearch) }
         >
           <img
