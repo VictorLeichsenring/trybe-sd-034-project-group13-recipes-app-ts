@@ -15,24 +15,21 @@ export function SearchBar() {
     if (location.pathname === '/meals') {
       switch (searchType) {
         case 'ingredient':
-          console.log('oi');
-
           endpoint = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${query}`;
-          console.log(endpoint);
 
           break;
         case 'name':
           endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`;
-          console.log(endpoint);
+
           break;
         case 'first-letter':
-          console.log(query.length);
 
           if (query.length > 1) {
             window.alert('Your search must have only 1 (one) character');
+            break;
+          } else {
+            endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?f=${query}`;
           }
-          endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?f=${query}`;
-          console.log(endpoint);
           break;
         default:
           break;
@@ -48,62 +45,28 @@ export function SearchBar() {
         case 'first-letter':
           if (query.length > 1) {
             window.alert('Your search must have only 1 (one) character');
+          } else {
+            endpoint = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${query}`;
           }
-          endpoint = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${query}`;
           break;
         default:
           break;
       }
-      console.log(endpoint);
-
+    }
+    if (endpoint) {
       const response = await fetch(endpoint);
       const data = await response.json();
-      console.log(data);
 
-      // try {
-      //   console.log('aiii');
-      // } catch (error) {
-      //   console.log(error);
-      // }
+      // Por exemplo, suponhamos que a resposta esteja em `data.meals` para comidas e `data.drinks` para bebidas.
+      if (location.pathname === '/meals' && data.meals && data.meals.length === 1) {
+        const mealId = data.meals[0].idMeal;
+        navigate(`/meals/${mealId}`);
+      } else if (location.pathname === '/drinks' && data.drinks && data.drinks.length === 1) {
+        const drinkId = data.drinks[0].idDrink;
+        navigate(`/drinks/${drinkId}`);
+      }
     }
   }
-
-  // const handleSearch = async () => {
-  //   const basePath = location.pathname === '/meals' ? 'https://www.themealdb.com' : 'https://www.thecocktaildb.com';
-  //   let endpoint = '';
-
-  //   switch (searchType) {
-  //     case 'ingredient':
-  //       endpoint = `${basePath}/api/json/v1/1/filter.php?i=${query}`;
-  //       break;
-  //     case 'name':
-  //       endpoint = `${basePath}/api/json/v1/1/search.php?s=${query}`;
-  //       break;
-  //     case firstLetter:
-  //       if (query.length !== 1) {
-  //         window.alert('Your search must have only 1 (one) character');
-  //       } else {
-  //         endpoint = `${basePath}}/api/json/v1/1/search.php?f=${query}`;
-  //       }
-  //       break;
-  //     default:
-  //       break;
-  //   }
-
-  //   if (endpoint) {
-  //     const response = await fetch(endpoint);
-  //     const data = await response.json();
-
-  //     if (data && data.length === 1) {
-  //       const recipeId = data[0].idMeal || data[0].idDrink;
-
-  //       if (location.pathname === '/meals') {
-  //         navigate(`/meals/${recipeId}`); // Redirecionando para a rota de detalhes
-  //       } else if (location.pathname === '/drinks') {
-  //         navigate(`/drinks/${recipeId}`); // Redirecionando para a rota de detalhes
-  //       }
-  //     }
-  //   }
 
   return (
     <div>
