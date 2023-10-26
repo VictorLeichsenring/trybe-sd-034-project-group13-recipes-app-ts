@@ -2,7 +2,6 @@
 import React from 'react';
 // import { useState, useEffect } from 'react';
 
-
 interface RecipesProps {
   image: string;
   name: string;
