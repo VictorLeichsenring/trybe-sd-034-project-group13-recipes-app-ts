@@ -1,8 +1,7 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 
 import RecipeCard from '../components/RecipeCard';
 import RecipeContext from '../context/RecipeContext';
-import fetchData from '../services/fetchData';
 
 function Meals() {
   // const [recipes, setRecipes] = useState<Array<any>>([]);
