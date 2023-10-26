@@ -1,70 +1,70 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import {
+  LocationType,
+  SearchType,
+  EndpointParams,
+  EndpointType,
+} from '../types';
 
-export function SearchBar() {
-  const location = useLocation();
-  const [searchType, setSearchType] = useState('');
+function SearchBar() {
+  const location:LocationType = useLocation();
+  const [searchType, setSearchType] = useState<SearchType>('ingredient');
   const [query, setQuery] = useState('');
 
   const navigate = useNavigate();
-  // const firstLetter = 'first-letter';
+  const FIRST_LETTER = 'first-letter';
+
+  const MEAL_ENDPOINTS = {
+    ingredient: 'https://www.themealdb.com/api/json/v1/1/filter.php?i=',
+    name: 'https://www.themealdb.com/api/json/v1/1/search.php?s=',
+    [FIRST_LETTER]: 'https://www.themealdb.com/api/json/v1/1/search.php?f=',
+  };
+
+  const DRINK_ENDPOINTS = {
+    ingredient: 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=',
+    name: 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=',
+    [FIRST_LETTER]: 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=',
+  };
+
+  function getEndpoint({
+    pathname: path,
+    searchType: type,
+    query: qry }: EndpointParams): string {
+    if (type === 'first-letter' && qry.length > 1) {
+      window.alert('Your search must have only 1 (one) character');
+      return '';
+    }
+
+    const ENDPOINTS = path === '/meals' ? MEAL_ENDPOINTS : DRINK_ENDPOINTS;
+    return ENDPOINTS[type] + qry;
+  }
+
+  async function fetchData(endpoint:EndpointType) {
+    const response = await fetch(endpoint);
+    return response.json();
+  }
 
   async function handleSearch() {
-    let endpoint = '';
+    const endpoint = getEndpoint({
+      pathname: location.pathname,
+      searchType,
+      query,
+    });
 
-    if (location.pathname === '/meals') {
-      switch (searchType) {
-        case 'ingredient':
-          endpoint = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${query}`;
+    if (!endpoint) return;
 
-          break;
-        case 'name':
-          endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`;
+    const data = await fetchData(endpoint);
+    console.log(data);
 
-          break;
-        case 'first-letter':
-
-          if (query.length > 1) {
-            window.alert('Your search must have only 1 (one) character');
-            break;
-          } else {
-            endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?f=${query}`;
-          }
-          break;
-        default:
-          break;
-      }
-    } else if (location.pathname === '/drinks') {
-      switch (searchType) {
-        case 'ingredient':
-          endpoint = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${query}`;
-          break;
-        case 'name':
-          endpoint = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${query}`;
-          break;
-        case 'first-letter':
-          if (query.length > 1) {
-            window.alert('Your search must have only 1 (one) character');
-          } else {
-            endpoint = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${query}`;
-          }
-          break;
-        default:
-          break;
-      }
-    }
-    if (endpoint) {
-      const response = await fetch(endpoint);
-      const data = await response.json();
-
-      // Por exemplo, suponhamos que a resposta esteja em `data.meals` para comidas e `data.drinks` para bebidas.
-      if (location.pathname === '/meals' && data.meals && data.meals.length === 1) {
-        const mealId = data.meals[0].idMeal;
-        navigate(`/meals/${mealId}`);
-      } else if (location.pathname === '/drinks' && data.drinks && data.drinks.length === 1) {
-        const drinkId = data.drinks[0].idDrink;
-        navigate(`/drinks/${drinkId}`);
-      }
+    if (location.pathname === '/meals'
+    && data.meals
+    && data.meals.length === 1) {
+      navigate(`/meals/${data.meals[0].idMeal}`);
+    } else if (location.pathname === '/drinks'
+    && data.drinks
+    && data.drinks.length === 1) {
+      navigate(`/drinks/${data.drinks[0].idDrink}`);
     }
   }
 
@@ -99,12 +99,12 @@ export function SearchBar() {
       <label htmlFor="first-letter">First letter</label>
       <input
         type="radio"
-        id="firstLetter"
-        value="first-letter"
+        id={ FIRST_LETTER }
+        value={ FIRST_LETTER }
           // name="search-bar"
         data-testid="first-letter-search-radio"
-        checked={ searchType === 'first-letter' }
-        onChange={ () => setSearchType('first-letter') }
+        checked={ searchType === FIRST_LETTER }
+        onChange={ () => setSearchType(FIRST_LETTER) }
       />
       <button
         data-testid="exec-search-btn"
@@ -119,4 +119,4 @@ export function SearchBar() {
   );
 }
 
-// export default SearchBar;
+export default SearchBar;
