@@ -28,19 +28,19 @@ function SearchBar() {
 
     const data = await fetchData(endpoint);
 
-    const pathnameComBarra = location.pathname;
-    const pathnameSemBarra = pathnameComBarra.replace('/', '');
+    const pathnameWithBar = location.pathname;
+    const pathnameWithOutBar = pathnameWithBar.replace('/', '');
 
-    if (data[pathnameSemBarra]) {
-      if (data[pathnameSemBarra].length > 12) {
-        providerValue.setRecipes(data[pathnameSemBarra].slice(0, 12));
+    if (data[pathnameWithOutBar]) {
+      if (data[pathnameWithOutBar].length > 12) {
+        providerValue.setRecipes(data[pathnameWithOutBar].slice(0, 12));
       }
 
-      if (data[pathnameSemBarra].length > 0 && data[pathnameSemBarra].length < 12) {
-        providerValue.setRecipes(data[pathnameSemBarra]);
+      if (data[pathnameWithOutBar].length > 0 && data[pathnameWithOutBar].length < 12) {
+        providerValue.setRecipes(data[pathnameWithOutBar]);
       }
     }
-    if (!data[pathnameSemBarra]) {
+    if (!data[pathnameWithOutBar]) {
       window.alert("Sorry, we haven't found any recipes for these filters.");
     }
 
@@ -59,6 +59,7 @@ function SearchBar() {
     <div>
       <input
         data-testid="search-input"
+        type="text"
         value={ query }
         onChange={ (e) => setQuery(e.target.value) }
       />

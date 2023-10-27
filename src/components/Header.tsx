@@ -6,30 +6,30 @@ import searchIcon from '../images/searchIcon.svg';
 
 function Header() {
   const location = useLocation();
-  const [titulo, setTitulo] = useState('');
+  const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
   const [inputSearch, setInputSearch] = useState(false);
 
   useEffect(() => {
     switch (location.pathname) {
-      case '/meals': setTitulo('Meals'); setSearch(true);
+      case '/meals': setTitle('Meals'); setSearch(true);
         break;
-      case '/drinks': setTitulo('Drinks'); setSearch(true);
+      case '/drinks': setTitle('Drinks'); setSearch(true);
         break;
-      case '/profile': setTitulo('Profile');
+      case '/profile': setTitle('Profile');
         break;
-      case '/done-recipes': setTitulo('Done Recipes');
+      case '/done-recipes': setTitle('Done Recipes');
         break;
-      case '/favorite-recipes': setTitulo('Favorite Recipes');
+      case '/favorite-recipes': setTitle('Favorite Recipes');
         break;
-      default: setTitulo('Not Default');
+      default: setTitle('Not Default');
     }
   }, [location]);
 
   return (
     <header>
       <h1 data-testid="page-title">
-        {titulo}
+        {title}
       </h1>
       <Link
         to="/profile"
