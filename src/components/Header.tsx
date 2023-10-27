@@ -8,7 +8,7 @@ function Header() {
   const location = useLocation();
   const [titulo, setTitulo] = useState('');
   const [search, setSearch] = useState(false);
-  const [inputSearch, setInputSearch] = useState(false);
+  const [inputSearch, setInputSearch] = useState(true);
 
   useEffect(() => {
     switch (location.pathname) {

@@ -155,5 +155,7 @@ describe('Header Component', () => {
     const btnSearchBar = getByTestId('exec-search-btn');
     await user.click(btnSearchBar);
     expect(btnSearchBar).toBeInTheDocument();
+    userEvent.click(radioName);
+    userEvent.type(searchInput, 'arrabiata');
   });
 });

@@ -6,9 +6,10 @@ import {
 } from '../types';
 import RecipeContext from '../context/RecipeContext';
 import fetchData, { getEndpoint } from '../services/fetchData';
+import CategoryFilterBottons from './CategoryFilterBottons';
 
 function SearchBar() {
-  const location:LocationType = useLocation();
+  const location: LocationType = useLocation();
   const { providerValue } = useContext(RecipeContext);
   const [searchType, setSearchType] = useState<SearchType>('ingredient');
   const [query, setQuery] = useState('');
@@ -28,29 +29,29 @@ function SearchBar() {
 
     const data = await fetchData(endpoint);
 
-    const pathnameComBarra = location.pathname;
-    const pathnameSemBarra = pathnameComBarra.replace('/', '');
+    const pathnameWithBar = location.pathname;
+    const pathnameWithOutBar = pathnameWithBar.replace('/', '');
 
-    if (data[pathnameSemBarra]) {
-      if (data[pathnameSemBarra].length > 12) {
-        providerValue.setRecipes(data[pathnameSemBarra].slice(0, 12));
+    if (data[pathnameWithOutBar]) {
+      if (data[pathnameWithOutBar].length > 12) {
+        providerValue.setRecipes(data[pathnameWithOutBar].slice(0, 12));
       }
 
-      if (data[pathnameSemBarra].length > 0 && data[pathnameSemBarra].length < 12) {
-        providerValue.setRecipes(data[pathnameSemBarra]);
+      if (data[pathnameWithOutBar].length > 0 && data[pathnameWithOutBar].length < 12) {
+        providerValue.setRecipes(data[pathnameWithOutBar]);
       }
     }
-    if (!data[pathnameSemBarra]) {
+    if (!data[pathnameWithOutBar]) {
       window.alert("Sorry, we haven't found any recipes for these filters.");
     }
 
     if (location.pathname === '/meals'
-    && data.meals
-    && data.meals.length === 1) {
+      && data.meals
+      && data.meals.length === 1) {
       navigate(`/meals/${data.meals[0].idMeal}`);
     } else if (location.pathname === '/drinks'
-    && data.drinks
-    && data.drinks.length === 1) {
+      && data.drinks
+      && data.drinks.length === 1) {
       navigate(`/drinks/${data.drinks[0].idDrink}`);
     }
   }
@@ -59,6 +60,7 @@ function SearchBar() {
     <div>
       <input
         data-testid="search-input"
+        type="text"
         value={ query }
         onChange={ (e) => setQuery(e.target.value) }
       />
@@ -89,6 +91,7 @@ function SearchBar() {
         checked={ searchType === FIRST_LETTER }
         onChange={ () => setSearchType(FIRST_LETTER) }
       />
+      <CategoryFilterBottons />
       <button
         data-testid="exec-search-btn"
         type="button"
