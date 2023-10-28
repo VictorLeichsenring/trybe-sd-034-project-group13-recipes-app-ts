@@ -18,16 +18,6 @@ function RecipeDetails() {
   const [recipeDetails, setRecipeDetails] = useState<RecipeDetailType>(null);
   const [recommendations, setRecommendations] = useState([]);
 
-  async function fetchRecommendations() {
-    const DRINK_ENDPOINT = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
-    const MEAL_ENDPOINT = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
-
-    const endpoint = isMeal ? DRINK_ENDPOINT : MEAL_ENDPOINT;
-    const response = await fetch(endpoint);
-    const data = await response.json();
-    setRecommendations(isMeal ? data.drinks : data.meals);
-  }
-
   function extractIngredients(recipe: any) {
     const ingredients = [];
     for (let i = 1; i <= 20; i++) {
@@ -42,8 +32,18 @@ function RecipeDetails() {
   }
 
   useEffect(() => {
+    async function fetchRecommendations() {
+      const DRINK_ENDPOINT = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+      const MEAL_ENDPOINT = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+
+      const endpoint = isMeal ? DRINK_ENDPOINT : MEAL_ENDPOINT;
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      setRecommendations(isMeal ? data.drinks : data.meals);
+    }
+
     fetchRecommendations();
-  }, []);
+  }, [isMeal]);
 
   useEffect(() => {
     function getEndpoint() {
