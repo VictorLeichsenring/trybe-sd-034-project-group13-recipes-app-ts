@@ -9,7 +9,6 @@ function CategoryFilterBottons() {
   const { setRecipes } = providerValue;
   const [selectedCategory, setSelectedCategory] = useState('');
 
-
   //   // função dentro do fetch para obter as categorias, esta usando async pois usa fetch
   useEffect(() => {
     //   // Função para obter as categorias

@@ -29,6 +29,8 @@ function Meals() {
             image={ recipe.strMealThumb }
             name={ recipe.strMeal }
             index={ index }
+            id={ recipe.idMeal }
+            type="meal"
           />
         ))}
       </div>
