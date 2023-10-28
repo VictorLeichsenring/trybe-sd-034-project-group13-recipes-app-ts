@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
+import RecipeContext from '../context/RecipeContext';
 
 function CategoryFilterBottons() {
   const [categories, setCategories] = useState([]);
   const location = useLocation();
+  const { providerValue } = useContext(RecipeContext);
+  const { setRecipes } = providerValue;
 
   //   // função dentro do fetch para obter as categorias, esta usando async pois usa fetch
   useEffect(() => {
@@ -38,11 +41,26 @@ function CategoryFilterBottons() {
   }, [location.pathname]); // Executa quando o pathname mu
 
   // função para filtrar as categorias do estado recipes do context
-  // function handleCategoryClick(category:any) {
+  async function handleCategoryClick(category:any) {
+    try {
+      let endpoint = '';
+      if (location.pathname === '/meals') {
+        endpoint = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
+      } else {
+        endpoint = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`;
+      }
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      if (data.meals || data.drinks) {
+        setRecipes(data.meals || data.drinks);
+      }
+    } catch (error) {
+      console.log('Erro ao filtrar receitas');
+    }
   //   const recipesFiltradas = providerValue.recipes
   //     .filter((recipe:any) => recipe.category === category);
   //   providerValue.setRecipes(recipesFiltradas);
-  // }
+  }
   return (
     <div>
 
@@ -50,12 +68,17 @@ function CategoryFilterBottons() {
         <button
           key={ categoryName.strCategory }
           data-testid={ `${categoryName.strCategory}-category-filter` }
-
-          // onClick={ () => handleCategoryClick(category.strCategory) }
+          onClick={ () => handleCategoryClick(categoryName.strCategory) }
         >
           {categoryName.strCategory}
         </button>
       ))}
+      <button
+        data-testid="All-category-filter"
+        onClick={ () => setRecipes([]) }
+      >
+        All
+      </button>
 
     </div>
   );
