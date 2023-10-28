@@ -10,12 +10,13 @@ function Header() {
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
   const [inputSearch, setInputSearch] = useState(false);
+  const [filterBottons, setFilterBottons] = useState(false);
 
   useEffect(() => {
     switch (location.pathname) {
-      case '/meals': setTitle('Meals'); setSearch(true);
+      case '/meals': setTitle('Meals'); setSearch(true); setFilterBottons(true);
         break;
-      case '/drinks': setTitle('Drinks'); setSearch(true);
+      case '/drinks': setTitle('Drinks'); setSearch(true); setFilterBottons(true);
         break;
       case '/profile': setTitle('Profile');
         break;
@@ -57,7 +58,9 @@ function Header() {
       {inputSearch && (
         <SearchBar />
       )}
-      <CategoryFilterBottons />
+      {filterBottons && (
+        <CategoryFilterBottons />
+      )}
     </header>
 
   );
