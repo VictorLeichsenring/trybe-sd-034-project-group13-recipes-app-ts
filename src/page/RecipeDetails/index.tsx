@@ -20,6 +20,23 @@ function RecipeDetails() {
   const [recipeDetails, setRecipeDetails] = useState<RecipeDetailType>(null);
   const [recommendations, setRecommendations] = useState([]);
 
+  function isRecipeDone() {
+    try {
+      const storedRecipes = localStorage.getItem('doneRecipes');
+      if (!storedRecipes) {
+        return false;
+      }
+      const doneRecipes = JSON.parse(storedRecipes) || [];
+
+      return doneRecipes.some(
+        (doneRecipe: { id: string | undefined; }) => doneRecipe.id === id,
+      );
+    } catch (error) {
+      console.log('Falha ao converter doneRecipes');
+      return false;
+    }
+  }
+
   function extractIngredients(recipe: any) {
     const ingredients = [];
     for (let i = 1; i <= 20; i++) {
@@ -123,12 +140,16 @@ function RecipeDetails() {
           />
         ))}
       </div>
-      <button
-        className="start-recipe-btn"
-        data-testid="start-recipe-btn"
-      >
-        Start Recipe
-      </button>
+      {
+        !isRecipeDone() && (
+          <button
+            className="start-recipe-btn"
+            data-testid="start-recipe-btn"
+          >
+            Start Recipe
+          </button>
+        )
+      }
     </div>
   );
 }
