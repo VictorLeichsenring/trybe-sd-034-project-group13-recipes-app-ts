@@ -29,9 +29,9 @@ function Login() {
     navigate('/meals');
   };
 
-  const emailValidacao = /\S+@\S+\.\S+/.test(email);
-  const passwordValidacao = password.length > 6;
-  const validacao = emailValidacao && passwordValidacao;
+  const emailValidate = /\S+@\S+\.\S+/.test(email);
+  const passwordValidate = password.length > 6;
+  const Validate = emailValidate && passwordValidate;
 
   return (
     <div>
@@ -52,7 +52,7 @@ function Login() {
         <button
           type="button"
           data-testid="login-submit-btn"
-          disabled={ !validacao }
+          disabled={ !Validate }
           onClick={ handleSubmit }
         >
           Entrar
