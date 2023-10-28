@@ -14,7 +14,19 @@ type RecipeDetailType = {
 function RecipeDetails() {
   const { id } = useParams();
   const location = useLocation();
+  const isMeal = location.pathname.includes('/meals/');
   const [recipeDetails, setRecipeDetails] = useState<RecipeDetailType>(null);
+  const [recommendations, setRecommendations] = useState([]);
+
+  async function fetchRecommendations() {
+    const DRINK_ENDPOINT = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+    const MEAL_ENDPOINT = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+
+    const endpoint = isMeal ? DRINK_ENDPOINT : MEAL_ENDPOINT;
+    const response = await fetch(endpoint);
+    const data = await response.json();
+    setRecommendations(isMeal ? data.drinks : data.meals);
+  }
 
   function extractIngredients(recipe: any) {
     const ingredients = [];
@@ -30,7 +42,10 @@ function RecipeDetails() {
   }
 
   useEffect(() => {
-    const isMeal = location.pathname.includes('/meals/');
+    fetchRecommendations();
+  }, []);
+
+  useEffect(() => {
     function getEndpoint() {
       if (isMeal) return `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
       return `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
@@ -57,7 +72,7 @@ function RecipeDetails() {
     }
 
     fetchRecipeDetails();
-  }, [id, location]);
+  }, [id, location, isMeal]);
 
   if (!recipeDetails) {
     return <p>Loading...</p>;
