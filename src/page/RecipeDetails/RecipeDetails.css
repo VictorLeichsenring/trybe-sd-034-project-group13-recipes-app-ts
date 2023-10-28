@@ -21,3 +21,10 @@ img {
   flex: 0 0 calc(50% - 8px);
   scroll-snap-align: start;
 }
+
+.start-recipe-btn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
