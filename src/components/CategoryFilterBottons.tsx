@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 function CategoryFilterBottons() {
   const [categories, setCategories] = useState([]);
   const location = useLocation();
-  console.log(categories);
 
   //   // função dentro do fetch para obter as categorias, esta usando async pois usa fetch
   useEffect(() => {
@@ -24,7 +23,7 @@ function CategoryFilterBottons() {
         const data = await response.json();
 
         if (data && data.meals) {
-          //         // Obtém as primeiras 5 categorias de refeições
+          // Obtém as primeiras 5 categorias de refeições
           setCategories(data.meals.slice(0, 5));
         } else if (data && data.drinks) {
           // Obtém as primeiras 5 categorias de bebidas

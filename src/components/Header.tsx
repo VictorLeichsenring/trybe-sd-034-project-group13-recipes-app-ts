@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react';
 import SearchBar from './SearchBar';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import CategoryFilterBottons from './CategoryFilterBottons';
 
 function Header() {
   const location = useLocation();
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
-  const [inputSearch, setInputSearch] = useState(true);
+  const [inputSearch, setInputSearch] = useState(false);
 
   useEffect(() => {
     switch (location.pathname) {
@@ -56,6 +57,7 @@ function Header() {
       {inputSearch && (
         <SearchBar />
       )}
+      <CategoryFilterBottons />
     </header>
 
   );

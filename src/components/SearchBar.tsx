@@ -6,7 +6,6 @@ import {
 } from '../types';
 import RecipeContext from '../context/RecipeContext';
 import fetchData, { getEndpoint } from '../services/fetchData';
-import CategoryFilterBottons from './CategoryFilterBottons';
 
 function SearchBar() {
   const location: LocationType = useLocation();
@@ -33,6 +32,9 @@ function SearchBar() {
     const pathnameWithOutBar = pathnameWithBar.replace('/', '');
 
     if (data[pathnameWithOutBar]) {
+      if (data[pathnameWithOutBar].length > 0) {
+        providerValue.setRecipes(data[pathnameWithOutBar]);
+      }
       if (data[pathnameWithOutBar].length > 12) {
         providerValue.setRecipes(data[pathnameWithOutBar].slice(0, 12));
       }
@@ -44,6 +46,11 @@ function SearchBar() {
     if (!data[pathnameWithOutBar]) {
       window.alert("Sorry, we haven't found any recipes for these filters.");
     }
+    // if (data[pathnameWithOutBar].length > 0) {
+    //   providerValue.setRecipes(data[pathnameWithOutBar]);
+    // } else {
+    //   window.alert("Sorry, we haven't found any recipes for these filters.");
+    // }
 
     if (location.pathname === '/meals'
       && data.meals
@@ -91,7 +98,6 @@ function SearchBar() {
         checked={ searchType === FIRST_LETTER }
         onChange={ () => setSearchType(FIRST_LETTER) }
       />
-      <CategoryFilterBottons />
       <button
         data-testid="exec-search-btn"
         type="button"

@@ -1,7 +1,9 @@
-// import renderWithRouter from '../helpers/renderWithRouter';
+import renderWithRouter from '../helpers/renderWithRouter';
 
-// import App from '../App';
+import App from '../App';
 
-// describe('Test App render', () => {
-//   test('Test the App render', async () => {
-//     const { getByTestId } = renderWithRouter(<App />);
+describe('Test App render', () => {
+  test('Test the App render', async () => {
+    renderWithRouter(<App />);
+  });
+});
