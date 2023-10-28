@@ -7,6 +7,8 @@ function CategoryFilterBottons() {
   const location = useLocation();
   const { providerValue } = useContext(RecipeContext);
   const { setRecipes } = providerValue;
+  const [selectedCategory, setSelectedCategory] = useState('');
+
 
   //   // função dentro do fetch para obter as categorias, esta usando async pois usa fetch
   useEffect(() => {
@@ -44,6 +46,11 @@ function CategoryFilterBottons() {
   async function handleCategoryClick(category:any) {
     try {
       let endpoint = '';
+      if (selectedCategory === category) {
+        setSelectedCategory('');
+        setRecipes([]);
+        return;
+      }
       if (location.pathname === '/meals') {
         endpoint = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
       } else {
@@ -53,6 +60,7 @@ function CategoryFilterBottons() {
       const data = await response.json();
       if (data.meals || data.drinks) {
         setRecipes(data.meals || data.drinks);
+        setSelectedCategory(category);
       }
     } catch (error) {
       console.log('Erro ao filtrar receitas');
@@ -75,7 +83,10 @@ function CategoryFilterBottons() {
       ))}
       <button
         data-testid="All-category-filter"
-        onClick={ () => setRecipes([]) }
+        onClick={ () => {
+          setRecipes([]);
+          setSelectedCategory('');
+        } }
       >
         All
       </button>
