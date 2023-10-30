@@ -26,9 +26,9 @@ describe('Test SearchBar Componet', () => {
     await user.click(btnSearchBar);
     expect(btnSearchBar).toBeInTheDocument();
 
+    const inputCampo = document.getElementById('inputCampo');
+    expect(inputCampo?.getAttribute('placeholder')).toBe('pesquisa')
     fireEvent.change(searchInput, { target: { value: 'rice' } });
-
-    
 
     // const endpoint = getByDisplayValue('https://www.themealdb.com/api/json/v1/1/search.php?s=teste');
 

@@ -3,11 +3,16 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import fetchData from '../../services/fetchData';
 import RecommendationCard from '../../components/RecommendationCard';
 import './RecipeDetails.css';
+import shareIcon from '../../images/shareIcon.svg';
+import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../../images/blackHeartIcon.svg';
 
 type RecipeDetailType = {
   image: string;
   title: string;
   category: string;
+  isAlcoholicOrNot: string;
+  nationality: string;
   ingredients: { ingredient: string; measure: string }[];
   instructions: string;
   video: string;
@@ -22,6 +27,8 @@ function RecipeDetails() {
   const [recommendations, setRecommendations] = useState([]);
   const [recipeDone, setRecipeDone] = useState(false);
   const [recipeInProgress, setRecipeInProgress] = useState(true);
+  const [messageCopied, setMessageCopied] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   function extractIngredients(recipe: any) {
     const ingredients = [];
@@ -97,16 +104,24 @@ function RecipeDetails() {
       const endpoint = getEndpoint();
       const data = await fetchData(endpoint);
       const recipe = (data.meals && data.meals[0]) || (data.drinks && data.drinks[0]);
+      console.log(recipe);
 
       if (!recipe) return;
 
       const ingredients = extractIngredients(recipe);
 
+      // const category = isMeal
+      //   ? recipe.strCategory
+      //   : recipe.strCategory;
+
       setRecipeDetails({
         image: recipe.strMealThumb || recipe.strDrinkThumb,
         title: recipe.strMeal || recipe.strDrink,
+        // category,
         category: isMeal
           ? recipe.strCategory : `${recipe.strCategory} - ${recipe.strAlcoholic}`,
+        alcoholicOrNot: recipe.strAlcoholic || '',
+        nationality: recipe.strArea || '',
         ingredients,
         instructions: recipe.strInstructions,
         video: recipe.strYoutube ? `https://www.youtube.com/embed/${recipe.strYoutube.split('v=')[1]}` : '',
@@ -120,16 +135,71 @@ function RecipeDetails() {
     return <p>Loading...</p>;
   }
 
+  function handleShareClick() {
+    const recipeLink = window.location.href;
+
+    // copiar para o clipboard
+    navigator.clipboard.writeText(recipeLink);
+
+    // seta estado
+    setMessageCopied(true);
+  }
+
+  function handleFavoriteClick() {
+    const storedFavorites = localStorage.getItem('favoriteRecipes') || '[]';
+    const parseFavorite = JSON.parse(storedFavorites);
+    if (recipeDetails) {
+      const recipeToFavorite = {
+        id,
+        type: isMeal ? 'meal' : 'drink',
+        nationality: recipeDetails.nationality,
+        category: recipeDetails?.category.split(' - ')[0],
+        alcoholicOrNot: isMeal ? '' : recipeDetails.category.split(' - ')[1],
+        name: recipeDetails?.title,
+        image: recipeDetails?.image,
+      };
+
+      const isAlreadyFavorited = parseFavorite.some((recipe: any) => recipe.id === id);
+      if (isAlreadyFavorited) {
+        const newFavorites = parseFavorite.filter((recipe: any) => recipe.id !== id);
+        localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
+      } else {
+        localStorage.setItem(
+          'favoriteRecipes',
+          JSON.stringify([...parseFavorite, recipeToFavorite]),
+        );
+      }
+    }
+  }
   return (
     <div>
       <div>
+        <button
+          data-testid="share-btn"
+          onClick={ handleShareClick }
+        >
+          Compartilhar
+        </button>
+
+        <button
+          data-testid="favorite-btn"
+          onClick={ handleFavoriteClick }
+        >
+          {isFavorite
+            ? <img src={ blackHeartIcon } alt="Favoritar" />
+            : <img src={ whiteHeartIcon } alt="Desfavoritar" />}
+        </button>
         <img
           src={ recipeDetails.image }
           alt={ recipeDetails.title }
           data-testid="recipe-photo"
         />
         <h2 data-testid="recipe-title">{recipeDetails.title}</h2>
-        <span data-testid="recipe-category">{recipeDetails.category}</span>
+        <span data-testid="recipe-category">
+          {recipeDetails.isAlcoholicOrNot
+            ? `${recipeDetails.title} - {${recipeDetails.isAlcoholicOrNot}}`
+            : recipeDetails.category}
+        </span>
         <ul>
           {recipeDetails.ingredients.map((item, index) => (
             <li key={ index } data-testid={ `${index}-ingredient-name-and-measure` }>
@@ -163,39 +233,37 @@ function RecipeDetails() {
           />
         ))}
       </div>
-
       {
-        !recipeDone && !recipeInProgress && (
-          <button
-            className="start-recipe-btn"
-            data-testid="start-recipe-btn"
-            onClick={ handleStartRecipe }
-          >
-            Start Recipe
-          </button>
-        )
-      }
+          messageCopied && (
+            <div
+              id="copy-message"
+            >
+              Link copied!
+            </div>
+          )
+        }
       {
-        recipeInProgress && (
-          <button
-            className="start-recipe-btn"
-            data-testid="start-recipe-btn"
-          >
-            Continue Recipe
-          </button>
+          !recipeDone && !recipeInProgress && (
+            <button
+              className="start-recipe-btn"
+              data-testid="start-recipe-btn"
+              onClick={ handleStartRecipe }
+            >
+              Start Recipe
+            </button>
+          )
+        }
+      {
+          recipeInProgress && (
+            <button
+              className="start-recipe-btn"
+              data-testid="start-recipe-btn"
+            >
+              Continue Recipe
+            </button>
 
-        )
-      }
-      <button
-        data-testid="share-btn"
-      >
-        Compartilhar
-      </button>
-      <button
-        data-testid="favorite-btn"
-      >
-        Favoritar
-      </button>
+          )
+        }
     </div>
   );
 }
