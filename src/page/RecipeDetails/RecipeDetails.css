@@ -1,0 +1,30 @@
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+
+.recommendations-section {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  width: 100%;
+}
+
+.recommendations-section::-webkit-scrollbar {
+  display: none;
+}
+
+.recommendation-card {
+  flex: 0 0 calc(50% - 8px);
+  scroll-snap-align: start;
+}
+
+.start-recipe-btn {
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+}

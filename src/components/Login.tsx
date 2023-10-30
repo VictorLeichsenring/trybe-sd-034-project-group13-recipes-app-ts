@@ -22,17 +22,16 @@ function Login() {
   };
 
   // função do botão enviar
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     localStorage.setItem('user', JSON.stringify(
       { email: user.email },
     ));
     navigate('/meals');
   };
 
-  const emailValidacao = /\S+@\S+\.\S+/.test(email);
-  const passwordValidacao = password.length > 6;
-  const validacao = emailValidacao && passwordValidacao;
+  const emailValidate = /\S+@\S+\.\S+/.test(email);
+  const passwordValidate = password.length > 6;
+  const Validate = emailValidate && passwordValidate;
 
   return (
     <div>
@@ -51,8 +50,9 @@ function Login() {
           onChange={ handleChangePassword }
         />
         <button
+          type="button"
           data-testid="login-submit-btn"
-          disabled={ !validacao }
+          disabled={ !Validate }
           onClick={ handleSubmit }
         >
           Entrar
