@@ -10,6 +10,7 @@ import Layout from './components/Layout';
 import DoneRecipes from './page/Done-Recipes';
 import FavoriteRecipes from './page/Favorite-Recipes';
 import RecipeDetails from './page/RecipeDetails';
+import RecipeInProgress from './page/RecipeInProgress';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/meals/:id" element={ <RecipeDetails /> } />
         <Route path="/drinks" element={ <Drinks /> } />
         <Route path="/drinks/:id" element={ <RecipeDetails /> } />
+        <Route path="/:type/:id/in-progress" element={ <RecipeInProgress /> } />
         <Route path="/profile" element={ <Profile /> } />
         <Route path="/done-recipes" element={ <DoneRecipes /> } />
         <Route path="/favorite-recipes" element={ <FavoriteRecipes /> } />

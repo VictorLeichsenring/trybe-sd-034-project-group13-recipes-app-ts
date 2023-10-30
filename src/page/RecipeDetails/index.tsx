@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import fetchData from '../../services/fetchData';
 import RecommendationCard from '../../components/RecommendationCard';
 import './RecipeDetails.css';
@@ -14,44 +14,14 @@ type RecipeDetailType = {
 } | null;
 
 function RecipeDetails() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
   const isMeal = location.pathname.includes('/meals/');
   const [recipeDetails, setRecipeDetails] = useState<RecipeDetailType>(null);
   const [recommendations, setRecommendations] = useState([]);
-
-  function isRecipeDone() {
-    try {
-      const storedRecipes = localStorage.getItem('doneRecipes');
-      if (!storedRecipes) {
-        return false;
-      }
-      const doneRecipes = JSON.parse(storedRecipes) || [];
-
-      return doneRecipes.some(
-        (doneRecipe: { id: string | undefined; }) => doneRecipe.id === id,
-      );
-    } catch (error) {
-      console.log('Falha ao converter doneRecipes');
-      return false;
-    }
-  }
-
-  function isRecipeInProgress() {
-    try {
-      const storedInProgressRecipes = localStorage.getItem('inProgressRecipes');
-      if (!storedInProgressRecipes) {
-        return false;
-      }
-      const inProgressRecipes = JSON.parse(storedInProgressRecipes) || [];
-      return inProgressRecipes.some(
-        (inProgressRecipe:{ id: string | undefined; }) => inProgressRecipe.id === id,
-      );
-    } catch (error) {
-      console.log('Falha ao converter inProgresssRecipes');
-      return false;
-    }
-  }
+  const [recipeDone, setRecipeDone] = useState(false);
+  const [recipeInProgress, setRecipeInProgress] = useState(true);
 
   function extractIngredients(recipe: any) {
     const ingredients = [];
@@ -65,6 +35,43 @@ function RecipeDetails() {
     }
     return ingredients;
   }
+
+  function handleStartRecipe() {
+    if (isMeal) {
+      navigate(`/meals/${id}/in-progress`);
+    } else {
+      navigate(`/drinks/${id}/in-progress`);
+    }
+  }
+
+  useEffect(() => {
+    function isRecipeInStorage(key: string) {
+      try {
+        const storedRecipes = localStorage.getItem(key);
+        if (!storedRecipes) {
+          return false;
+        }
+        const parseData = JSON.parse(storedRecipes) || [];
+
+        if (key === 'inProgressRecipes' && id) {
+          const category = isMeal ? 'meals' : 'drinks';
+          return parseData[category] && parseData[category][id];
+        }
+
+        if (key === 'doneRecipes') {
+          return parseData.some((
+            recipe: { id: string | undefined; },
+          ) => recipe.id === id);
+        }
+        return false;
+      } catch (error) {
+        console.log(`Falha ao converter${key}`);
+        return false;
+      }
+    }
+    setRecipeDone(isRecipeInStorage('doneRecipes'));
+    setRecipeInProgress(isRecipeInStorage('inProgressRecipes'));
+  }, [id, isMeal]);
 
   useEffect(() => {
     async function fetchRecommendations() {
@@ -156,26 +163,39 @@ function RecipeDetails() {
           />
         ))}
       </div>
+
       {
-        !isRecipeDone() && (
+        !recipeDone && !recipeInProgress && (
           <button
             className="start-recipe-btn"
             data-testid="start-recipe-btn"
+            onClick={ handleStartRecipe }
           >
             Start Recipe
           </button>
         )
       }
       {
-        !isRecipeInProgress() && (
+        recipeInProgress && (
           <button
             className="start-recipe-btn"
             data-testid="start-recipe-btn"
           >
             Continue Recipe
           </button>
+
         )
       }
+      <button
+        data-testid="share-btn"
+      >
+        Compartilhar
+      </button>
+      <button
+        data-testid="favorite-btn"
+      >
+        Favoritar
+      </button>
     </div>
   );
 }

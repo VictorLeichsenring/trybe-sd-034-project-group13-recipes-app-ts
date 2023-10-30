@@ -70,6 +70,8 @@ function SearchBar() {
         type="text"
         value={ query }
         onChange={ (e) => setQuery(e.target.value) }
+        placeholder="pesquisa"
+        id="inputCampo"
       />
       <label htmlFor="ingredient">Ingredient</label>
       <input

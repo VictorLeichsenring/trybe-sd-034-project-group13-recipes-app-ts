@@ -1,4 +1,5 @@
 import userEvent from '@testing-library/user-event';
+import { fireEvent } from '@testing-library/dom';
 import SearchBar from '../components/SearchBar';
 import renderWithRouter from '../helpers/renderWithRouter';
 import '@testing-library/jest-dom/extend-expect';
@@ -24,6 +25,10 @@ describe('Test SearchBar Componet', () => {
     const btnSearchBar = getByTestId('exec-search-btn');
     await user.click(btnSearchBar);
     expect(btnSearchBar).toBeInTheDocument();
+
+    fireEvent.change(searchInput, { target: { value: 'rice' } });
+
+    
 
     // const endpoint = getByDisplayValue('https://www.themealdb.com/api/json/v1/1/search.php?s=teste');
 
@@ -60,10 +65,7 @@ describe('Test SearchBar Componet', () => {
     await user.type(searchInput, 'teste');
     expect(searchInput).toBeInTheDocument();
 
-    // const endpoint = findByText('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=teste', );
-    // expect(endpoint).toBeInTheDocument();
-    // expect(searchInput).toBeInTheDocument();
-    // fireEvent.change(searchInput, { target: { value: 'rice' } });
+    fireEvent.change(searchInput, { target: { value: 'water' } });
 
     // const radioIngredient = getByTestId('ingredient-search-radio');
     // expect(radioIngredient).toBeInTheDocument();
