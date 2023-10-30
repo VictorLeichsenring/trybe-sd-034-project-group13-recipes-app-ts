@@ -6,11 +6,11 @@ img {
 
 .recommendations-section {
   display: flex;
-  overflow-x: auto;
   gap: 16px;
-  width: 100%;
+  overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
+  width: 100%;
 }
 
 .recommendations-section::-webkit-scrollbar {
@@ -24,7 +24,7 @@ img {
 
 .start-recipe-btn {
   bottom: 0;
-  position: fixed;
   left: 0;
+  position: fixed;
   right: 0;
 }
