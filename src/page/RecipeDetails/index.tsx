@@ -104,20 +104,14 @@ function RecipeDetails() {
       const endpoint = getEndpoint();
       const data = await fetchData(endpoint);
       const recipe = (data.meals && data.meals[0]) || (data.drinks && data.drinks[0]);
-      console.log(recipe);
 
       if (!recipe) return;
 
       const ingredients = extractIngredients(recipe);
 
-      // const category = isMeal
-      //   ? recipe.strCategory
-      //   : recipe.strCategory;
-
       setRecipeDetails({
         image: recipe.strMealThumb || recipe.strDrinkThumb,
         title: recipe.strMeal || recipe.strDrink,
-        // category,
         category: isMeal
           ? recipe.strCategory : `${recipe.strCategory} - ${recipe.strAlcoholic}`,
         alcoholicOrNot: recipe.strAlcoholic || '',

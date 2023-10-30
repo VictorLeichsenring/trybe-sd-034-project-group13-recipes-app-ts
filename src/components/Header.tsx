@@ -13,6 +13,13 @@ function Header() {
   const [filterBottons, setFilterBottons] = useState(false);
 
   useEffect(() => {
+    if (location.pathname.includes('/meals/') || location.pathname.includes('/drinks/')) {
+      setTitle('Details');
+      setSearch(false);
+      setFilterBottons(false);
+      return;
+  }
+
     switch (location.pathname) {
       case '/meals': setTitle('Meals'); setSearch(true); setFilterBottons(true);
         break;
