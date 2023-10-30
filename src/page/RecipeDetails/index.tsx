@@ -37,6 +37,22 @@ function RecipeDetails() {
     }
   }
 
+  function isRecipeInProgress() {
+    try {
+      const storedInProgressRecipes = localStorage.getItem('inProgressRecipes');
+      if (!storedInProgressRecipes) {
+        return false;
+      }
+      const inProgressRecipes = JSON.parse(storedInProgressRecipes) || [];
+      return inProgressRecipes.some(
+        (inProgressRecipe:{ id: string | undefined; }) => inProgressRecipe.id === id,
+      );
+    } catch (error) {
+      console.log('Falha ao converter inProgresssRecipes');
+      return false;
+    }
+  }
+
   function extractIngredients(recipe: any) {
     const ingredients = [];
     for (let i = 1; i <= 20; i++) {
@@ -147,6 +163,16 @@ function RecipeDetails() {
             data-testid="start-recipe-btn"
           >
             Start Recipe
+          </button>
+        )
+      }
+      {
+        !isRecipeInProgress() && (
+          <button
+            className="start-recipe-btn"
+            data-testid="start-recipe-btn"
+          >
+            Continue Recipe
           </button>
         )
       }

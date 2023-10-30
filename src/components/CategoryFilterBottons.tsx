@@ -6,7 +6,7 @@ function CategoryFilterBottons() {
   const [categories, setCategories] = useState([]);
   const location = useLocation();
   const { providerValue } = useContext(RecipeContext);
-  const { setRecipes } = providerValue;
+  const { setRecipes } = providerValue || {};
   const [selectedCategory, setSelectedCategory] = useState('');
 
   //   // função dentro do fetch para obter as categorias, esta usando async pois usa fetch

@@ -11,8 +11,12 @@ interface RecipesProps {
 }
 
 function Recipes({ image, name, index, id, type }: RecipesProps) {
+  const linkRecipe = type === 'meal' ? `/meals/${id}` : `/drinks/${id}`;
   return (
-    <Link to={ type === 'meal' ? `/meals/${id}` : `/drinks/${id}` }>
+    <Link
+      to={ linkRecipe }
+      data-testid={ `${index}-recipe-link` }
+    >
       <div
         data-testid={ `${index}-recipe-card` }
       >
