@@ -41,7 +41,7 @@ function RecipeInProgress() {
             key={ index }
             data-testid={ `${index}-ingredient-step` }
             style={
-              { textDecoration: checkedIngredients[index]
+              { textDecoration: checkedIngredients.includes(index)
                 ? 'line-through solid rgb(0, 0, 0)'
                 : 'none' }
             }
@@ -50,7 +50,7 @@ function RecipeInProgress() {
               type="checkbox"
               value={ item.ingredient }
               onChange={ () => handleCheckboxChange(index) }
-              checked={ checkedIngredients[index] }
+              checked={ checkedIngredients.includes(index) }
             />
             {item.ingredient}
             {' '}

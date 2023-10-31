@@ -67,3 +67,25 @@ export function toggleFavoriteRecipe(
     setToLocalStorage('favoriteRecipes', [...storedFavorites, recipeToFavorite]);
   }
 }
+
+export function saveRecipeProgress(
+  id: string,
+  isMeal: boolean,
+  ingredients: number[],
+): void {
+  const inProgress = getFromLocalStorage('inProgressRecipes', { drinks: {}, meals: {} });
+  const category = isMeal ? 'meals' : 'drinks';
+
+  inProgress[category][id] = ingredients;
+
+  setToLocalStorage('inProgressRecipes', inProgress);
+}
+
+export function getRecipeProgress(
+  id: string,
+  isMeal: boolean,
+): number[] {
+  const inProgress = getFromLocalStorage('inProgressRecipes', { drinks: {}, meals: {} });
+  const category = isMeal ? 'meals' : 'drinks';
+  return inProgress[category]?.[id] || [];
+}

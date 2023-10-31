@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import fetchData from '../services/fetchData';
-import { isRecipeInStorage, toggleFavoriteRecipe } from '../services/localStorageUtils';
+import {
+  saveRecipeProgress,
+  getRecipeProgress } from '../services/localStorageUtils';
 
 type RecipeDetailType = {
   image: string;
@@ -11,13 +13,18 @@ type RecipeDetailType = {
 } | null;
 
 function useRecipeInProgress() {
-  const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
   const [recipeDetails, setRecipeDetails] = useState<RecipeDetailType>(null);
-  const [isFavorite, setIsFavorite] = useState(false);
   const isMeal = location.pathname.includes('/meals/');
-  const [checkedIngredients, setCheckedIngredients] = useState<boolean[]>([]);
+  const [checkedIngredients, setCheckedIngredients] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (id) {
+      const progress = getRecipeProgress(id, isMeal);
+      setCheckedIngredients(progress);
+    }
+  }, [id, isMeal]);
 
   function extractIngredients(recipe: any) {
     const ingredients = [];
@@ -33,11 +40,19 @@ function useRecipeInProgress() {
   }
 
   const handleCheckboxChange = (index: number) => {
-    setCheckedIngredients((prevState) => {
-      const newState = [...prevState];
-      newState[index] = !newState[index];
-      return newState;
-    });
+    let updatedIngredients;
+
+    if (checkedIngredients.includes(index)) {
+      updatedIngredients = checkedIngredients.filter((item) => item !== index);
+    } else {
+      updatedIngredients = [...checkedIngredients, index];
+    }
+
+    setCheckedIngredients(updatedIngredients);
+
+    if (id) {
+      saveRecipeProgress(id, isMeal, updatedIngredients);
+    }
   };
 
   useEffect(() => {
@@ -61,7 +76,8 @@ function useRecipeInProgress() {
           ? recipe.strCategory : `${recipe.strCategory} - ${recipe.strAlcoholic}`,
         ingredients,
       });
-      setCheckedIngredients(new Array(ingredients.length).fill(false));
+      const progress = getRecipeProgress(id, isMeal);
+      setCheckedIngredients(progress);
     }
     fetchRecipeDetails();
   }, [id, location, isMeal]);
