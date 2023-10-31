@@ -95,6 +95,15 @@ function RecipeDetails() {
   }, [isMeal]);
 
   useEffect(() => {
+    function isRecipeFavorite() {
+      const storedFavorites = localStorage.getItem('favoriteRecipes') || '[]';
+      const parseFavorites = JSON.parse(storedFavorites);
+      return parseFavorites.some((recipe: any) => recipe.id === id);
+    }
+    setIsFavorite(isRecipeFavorite());
+  }, [id]);
+
+  useEffect(() => {
     function getEndpoint() {
       if (isMeal) return `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
       return `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
@@ -157,11 +166,13 @@ function RecipeDetails() {
       if (isAlreadyFavorited) {
         const newFavorites = parseFavorite.filter((recipe: any) => recipe.id !== id);
         localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
+        setIsFavorite(false);
       } else {
         localStorage.setItem(
           'favoriteRecipes',
           JSON.stringify([...parseFavorite, recipeToFavorite]),
         );
+        setIsFavorite(true);
       }
     }
   }
