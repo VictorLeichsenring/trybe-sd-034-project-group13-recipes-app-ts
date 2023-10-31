@@ -2,7 +2,6 @@ import useRecipeInProgress from '../../hooks/useRecipeInProgress';
 
 function RecipeInProgress() {
   const {
-    isMeal,
     recipeDetails,
   } = useRecipeInProgress();
 
@@ -38,6 +37,21 @@ function RecipeInProgress() {
           />
         </button>
       </div>
+      <ul>
+        {recipeDetails.ingredients.map((item, index) => (
+          <li
+            key={ index }
+            data-testid={ `${index}-ingredient-step` }
+          >
+            <input type="checkbox" value={ item.ingredient } />
+            {item.ingredient}
+            {' '}
+            -
+            {' '}
+            {item.measure}
+          </li>
+        ))}
+      </ul>
       <p
         data-testid="instructions"
       >

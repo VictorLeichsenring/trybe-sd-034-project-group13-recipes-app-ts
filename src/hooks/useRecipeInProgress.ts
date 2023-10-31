@@ -7,6 +7,7 @@ type RecipeDetailType = {
   image: string;
   title: string;
   category: string;
+  ingredients: { ingredient: string; measure: string }[];
 } | null;
 
 function useRecipeInProgress() {
@@ -16,6 +17,19 @@ function useRecipeInProgress() {
   const [recipeDetails, setRecipeDetails] = useState<RecipeDetailType>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const isMeal = location.pathname.includes('/meals/');
+
+  function extractIngredients(recipe: any) {
+    const ingredients = [];
+    for (let i = 1; i <= 20; i++) {
+      if (recipe[`strIngredient${i}`]) {
+        ingredients.push({
+          ingredient: recipe[`strIngredient${i}`],
+          measure: recipe[`strMeasure${i}`],
+        });
+      }
+    }
+    return ingredients;
+  }
 
   useEffect(() => {
     function getEndpoint() {
@@ -28,12 +42,15 @@ function useRecipeInProgress() {
       const data = await fetchData(endpoint);
       const recipe = (data.meals && data.meals[0]) || (data.drinks && data.drinks[0]);
 
+      const ingredients = extractIngredients(recipe);
+
       if (!recipe) return;
       setRecipeDetails({
         image: recipe.strMealThumb || recipe.strDrinkThumb,
         title: recipe.strMeal || recipe.strDrink,
         category: isMeal
           ? recipe.strCategory : `${recipe.strCategory} - ${recipe.strAlcoholic}`,
+        ingredients,
       });
     }
     fetchRecipeDetails();
