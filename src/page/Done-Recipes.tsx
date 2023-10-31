@@ -1,7 +1,7 @@
 function DoneRecipes() {
   return (
     <div>
-      <h1>Meals</h1>
+      <h1>Done Recipes Component</h1>
     </div>
   );
 }

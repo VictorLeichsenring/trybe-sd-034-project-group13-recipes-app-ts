@@ -1,20 +1,26 @@
 import { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import fetchData from '../services/fetchData';
 import {
   saveRecipeProgress,
   getRecipeProgress,
-  toggleFavoriteRecipe } from '../services/localStorageUtils';
+  toggleFavoriteRecipe,
+  getFromLocalStorage,
+  setToLocalStorage } from '../services/localStorageUtils';
 
 type RecipeDetailType = {
+  id: string;
   image: string;
   title: string;
   category: string;
   nationality: string;
   ingredients: { ingredient: string; measure: string }[];
+  isAlcoholicOrNot: string;
+  tags: string[];
 } | null;
 
 function useRecipeInProgress() {
+  const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
   const [recipeDetails, setRecipeDetails] = useState<RecipeDetailType>(null);
@@ -22,6 +28,15 @@ function useRecipeInProgress() {
   const [checkedIngredients, setCheckedIngredients] = useState<number[]>([]);
   const [messageCopied, setMessageCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isFinishButtonEnabled, setIsFinishButtonEnabled] = useState(false);
+
+  useEffect(() => {
+    if (recipeDetails && recipeDetails.ingredients) {
+      setIsFinishButtonEnabled(
+        checkedIngredients.length === recipeDetails.ingredients.length,
+      );
+    }
+  }, [checkedIngredients, recipeDetails]);
 
   useEffect(() => {
     if (id) {
@@ -80,14 +95,22 @@ function useRecipeInProgress() {
 
       const ingredients = extractIngredients(recipe);
 
+      const tagsString = recipe.strTags || '';
+      const tagsArray = tagsString.split(',').filter((tag: string) => tag.trim() !== '');
+
       if (!recipe) return;
+      if (!id) return;
       setRecipeDetails({
-        image: recipe.strMealThumb || recipe.strDrinkThumb,
+        id,
+        nationality: recipe.strArea || '',
         title: recipe.strMeal || recipe.strDrink,
         category: isMeal
           ? recipe.strCategory : `${recipe.strCategory} - ${recipe.strAlcoholic}`,
+        // category: recipe.strCategory || '',
+        image: recipe.strMealThumb || recipe.strDrinkThumb,
         ingredients,
-        nationality: recipe.strArea || '',
+        isAlcoholicOrNot: recipe.strAlcoholic || '',
+        tags: tagsArray,
       });
       if (!id) return;
       const progress = getRecipeProgress(id, isMeal);
@@ -113,6 +136,28 @@ function useRecipeInProgress() {
       setIsFavorite(!isFavorite);
     }
   }
+  function handleFinishRecipe() {
+    const currentDate = new Date().toISOString();
+    if (!recipeDetails) return;
+    const onlyCategory = isMeal
+      ? recipeDetails.category : recipeDetails.category.split(' - ')[0];
+
+    const recipeToAdd = {
+      id,
+      name: recipeDetails?.title || '',
+      image: recipeDetails?.image || '',
+      category: onlyCategory || '',
+      nationality: recipeDetails?.nationality || '',
+      alcoholicOrNot: recipeDetails?.isAlcoholicOrNot,
+      doneDate: currentDate,
+      tags: recipeDetails?.tags,
+      type: isMeal ? 'meal' : 'drink',
+    };
+    const doneRecipes = getFromLocalStorage('doneRecipes') || [];
+    doneRecipes.push(recipeToAdd);
+    setToLocalStorage('doneRecipes', doneRecipes);
+    navigate('/done-recipes');
+  }
   return {
     isMeal,
     recipeDetails,
@@ -122,6 +167,8 @@ function useRecipeInProgress() {
     handleCheckboxChange,
     handleShareClick,
     handleFavoriteClick,
+    isFinishButtonEnabled,
+    handleFinishRecipe,
   };
 }
 

@@ -1,6 +1,7 @@
 import useRecipeInProgress from '../../hooks/useRecipeInProgress';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
+import './RecipeInProgess.css';
 
 function RecipeInProgress() {
   const {
@@ -11,6 +12,8 @@ function RecipeInProgress() {
     handleCheckboxChange,
     handleShareClick,
     handleFavoriteClick,
+    isFinishButtonEnabled,
+    handleFinishRecipe,
   } = useRecipeInProgress();
 
   if (!recipeDetails) {
@@ -84,7 +87,14 @@ function RecipeInProgress() {
         ))}
       </ul>
       <p data-testid="instructions">Instruções</p>
-      <button data-testid="finish-recipe-btn">Finish Recipe</button>
+      <button
+        className="finish-button-container"
+        disabled={ !isFinishButtonEnabled }
+        data-testid="finish-recipe-btn"
+        onClick={ handleFinishRecipe }
+      >
+        Finish Recipe
+      </button>
     </div>
   );
 }
