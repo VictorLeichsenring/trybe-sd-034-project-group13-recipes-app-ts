@@ -88,14 +88,14 @@ function RecipeDetails() {
         ))}
       </div>
       {
-          messageCopied && (
-            <div
-              id="copy-message"
-            >
-              Link copied!
-            </div>
-          )
-        }
+        messageCopied && (
+          <div
+            id="copy-message"
+          >
+            Link copied!
+          </div>
+        )
+      }
       {
           !recipeDone && !recipeInProgress && (
             <button

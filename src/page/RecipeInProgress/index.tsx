@@ -1,10 +1,16 @@
 import useRecipeInProgress from '../../hooks/useRecipeInProgress';
+import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../../images/blackHeartIcon.svg';
 
 function RecipeInProgress() {
   const {
     recipeDetails,
     checkedIngredients,
+    messageCopied,
+    isFavorite,
     handleCheckboxChange,
+    handleShareClick,
+    handleFavoriteClick,
   } = useRecipeInProgress();
 
   if (!recipeDetails) {
@@ -25,12 +31,29 @@ function RecipeInProgress() {
         {recipeDetails.category}
       </span>
       <div>
-        <button data-testid="share-btn">Compartilhar</button>
-        <button>
+        <button
+          data-testid="share-btn"
+          onClick={ handleShareClick }
+        >
+          Compartilhar
+        </button>
+        {
+        messageCopied && (
+          <div
+            id="copy-message"
+          >
+            Link copied!
+          </div>
+        )
+      }
+        <button
+          onClick={ handleFavoriteClick }
+
+        >
           Favorite Recipe
           <img
             data-testid="favorite-btn"
-            // src={ !isFavorite ? whiteHeartIcon : blackHeartIcon }
+            src={ !isFavorite ? whiteHeartIcon : blackHeartIcon }
             alt="favorite icon"
           />
         </button>

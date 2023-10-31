@@ -73,7 +73,6 @@ function useRecipeDetails() {
     function isRecipeFavorite() {
       const storedFavorites = localStorage.getItem('favoriteRecipes') || '[]';
       const parseFavorites = JSON.parse(storedFavorites);
-      console.log(parseFavorites);
       return parseFavorites.some((recipe: any) => recipe.id === id);
     }
     setIsFavorite(isRecipeFavorite());

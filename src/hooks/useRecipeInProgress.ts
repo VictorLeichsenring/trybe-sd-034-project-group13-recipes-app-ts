@@ -3,12 +3,14 @@ import { useParams, useLocation } from 'react-router-dom';
 import fetchData from '../services/fetchData';
 import {
   saveRecipeProgress,
-  getRecipeProgress } from '../services/localStorageUtils';
+  getRecipeProgress,
+  toggleFavoriteRecipe } from '../services/localStorageUtils';
 
 type RecipeDetailType = {
   image: string;
   title: string;
   category: string;
+  nationality: string;
   ingredients: { ingredient: string; measure: string }[];
 } | null;
 
@@ -18,6 +20,8 @@ function useRecipeInProgress() {
   const [recipeDetails, setRecipeDetails] = useState<RecipeDetailType>(null);
   const isMeal = location.pathname.includes('/meals/');
   const [checkedIngredients, setCheckedIngredients] = useState<number[]>([]);
+  const [messageCopied, setMessageCopied] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -54,6 +58,14 @@ function useRecipeInProgress() {
       saveRecipeProgress(id, isMeal, updatedIngredients);
     }
   };
+  useEffect(() => {
+    function isRecipeFavorite() {
+      const storedFavorites = localStorage.getItem('favoriteRecipes') || '[]';
+      const parseFavorites = JSON.parse(storedFavorites);
+      return parseFavorites.some((recipe: any) => recipe.id === id);
+    }
+    setIsFavorite(isRecipeFavorite());
+  }, [id]);
 
   useEffect(() => {
     function getEndpoint() {
@@ -75,18 +87,41 @@ function useRecipeInProgress() {
         category: isMeal
           ? recipe.strCategory : `${recipe.strCategory} - ${recipe.strAlcoholic}`,
         ingredients,
+        nationality: recipe.strArea || '',
       });
+      if (!id) return;
       const progress = getRecipeProgress(id, isMeal);
       setCheckedIngredients(progress);
     }
     fetchRecipeDetails();
   }, [id, location, isMeal]);
 
+  function handleShareClick() {
+    let recipeLink = window.location.href;
+    recipeLink = recipeLink.replace('/in-progress', '');
+
+    // copiar para o clipboard
+    navigator.clipboard.writeText(recipeLink);
+
+    // seta estado
+    setMessageCopied(true);
+  }
+
+  function handleFavoriteClick() {
+    if (recipeDetails && id) {
+      toggleFavoriteRecipe(recipeDetails, id, isMeal);
+      setIsFavorite(!isFavorite);
+    }
+  }
   return {
     isMeal,
     recipeDetails,
     checkedIngredients,
+    messageCopied,
+    isFavorite,
     handleCheckboxChange,
+    handleShareClick,
+    handleFavoriteClick,
   };
 }
 
