@@ -17,6 +17,7 @@ function useRecipeInProgress() {
   const [recipeDetails, setRecipeDetails] = useState<RecipeDetailType>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const isMeal = location.pathname.includes('/meals/');
+  const [checkedIngredients, setCheckedIngredients] = useState<boolean[]>([]);
 
   function extractIngredients(recipe: any) {
     const ingredients = [];
@@ -30,6 +31,14 @@ function useRecipeInProgress() {
     }
     return ingredients;
   }
+
+  const handleCheckboxChange = (index: number) => {
+    setCheckedIngredients((prevState) => {
+      const newState = [...prevState];
+      newState[index] = !newState[index];
+      return newState;
+    });
+  };
 
   useEffect(() => {
     function getEndpoint() {
@@ -52,6 +61,7 @@ function useRecipeInProgress() {
           ? recipe.strCategory : `${recipe.strCategory} - ${recipe.strAlcoholic}`,
         ingredients,
       });
+      setCheckedIngredients(new Array(ingredients.length).fill(false));
     }
     fetchRecipeDetails();
   }, [id, location, isMeal]);
@@ -59,6 +69,8 @@ function useRecipeInProgress() {
   return {
     isMeal,
     recipeDetails,
+    checkedIngredients,
+    handleCheckboxChange,
   };
 }
 

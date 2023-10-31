@@ -3,6 +3,8 @@ import useRecipeInProgress from '../../hooks/useRecipeInProgress';
 function RecipeInProgress() {
   const {
     recipeDetails,
+    checkedIngredients,
+    handleCheckboxChange,
   } = useRecipeInProgress();
 
   if (!recipeDetails) {
@@ -23,11 +25,7 @@ function RecipeInProgress() {
         {recipeDetails.category}
       </span>
       <div>
-        <button
-          data-testid="share-btn"
-        >
-          Compartilhar
-        </button>
+        <button data-testid="share-btn">Compartilhar</button>
         <button>
           Favorite Recipe
           <img
@@ -42,8 +40,18 @@ function RecipeInProgress() {
           <li
             key={ index }
             data-testid={ `${index}-ingredient-step` }
+            style={
+              { textDecoration: checkedIngredients[index]
+                ? 'line-through solid rgb(0, 0, 0)'
+                : 'none' }
+            }
           >
-            <input type="checkbox" value={ item.ingredient } />
+            <input
+              type="checkbox"
+              value={ item.ingredient }
+              onChange={ () => handleCheckboxChange(index) }
+              checked={ checkedIngredients[index] }
+            />
             {item.ingredient}
             {' '}
             -
@@ -52,16 +60,8 @@ function RecipeInProgress() {
           </li>
         ))}
       </ul>
-      <p
-        data-testid="instructions"
-      >
-        Instruções
-      </p>
-      <button
-        data-testid="finish-recipe-btn"
-      >
-        Finish Recipe
-      </button>
+      <p data-testid="instructions">Instruções</p>
+      <button data-testid="finish-recipe-btn">Finish Recipe</button>
     </div>
   );
 }
