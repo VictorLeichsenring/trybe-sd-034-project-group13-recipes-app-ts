@@ -18,7 +18,7 @@ function Header() {
       setSearch(false);
       setFilterBottons(false);
       return;
-  }
+    }
 
     switch (location.pathname) {
       case '/meals': setTitle('Meals'); setSearch(true); setFilterBottons(true);
