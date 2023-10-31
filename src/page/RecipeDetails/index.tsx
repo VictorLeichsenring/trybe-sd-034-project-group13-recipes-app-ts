@@ -187,12 +187,16 @@ function RecipeDetails() {
         </button>
 
         <button
-          data-testid="favorite-btn"
+          // data-testid="favorite-btn"
           onClick={ handleFavoriteClick }
+
         >
-          {isFavorite
-            ? <img src={ blackHeartIcon } alt="Favoritar" />
-            : <img src={ whiteHeartIcon } alt="Desfavoritar" />}
+          Favorite Recipe
+          <img
+            data-testid="favorite-btn"
+            src={ !isFavorite ? whiteHeartIcon : blackHeartIcon }
+            alt="favorite icon"
+          />
         </button>
         <img
           src={ recipeDetails.image }
