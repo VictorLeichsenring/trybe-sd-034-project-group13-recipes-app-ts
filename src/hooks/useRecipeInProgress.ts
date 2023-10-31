@@ -83,41 +83,46 @@ function useRecipeInProgress() {
   }, [id]);
 
   useEffect(() => {
-    function getEndpoint() {
-      if (isMeal) return `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
-      return `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
-    }
+    const getEndpoint = () => `https://www.${isMeal ? 'themealdb' : 'thecocktaildb'}.com/api/json/v1/1/lookup.php?i=${id}`;
+
+    const getRecipeProperty = (
+      recipe: any,
+      mealProp: string,
+      drinkProp: string,
+    ) => (isMeal ? recipe[mealProp] : recipe[drinkProp]);
 
     async function fetchRecipeDetails() {
+      if (!id) return;
+
       const endpoint = getEndpoint();
       const data = await fetchData(endpoint);
-      const recipe = (data.meals && data.meals[0]) || (data.drinks && data.drinks[0]);
-
-      const ingredients = extractIngredients(recipe);
-
-      const tagsString = recipe.strTags || '';
-      const tagsArray = tagsString.split(',').filter((tag: string) => tag.trim() !== '');
+      const recipe = data.meals?.[0] || data.drinks?.[0];
 
       if (!recipe) return;
-      if (!id) return;
+
+      const ingredients = extractIngredients(recipe);
+      const tagsArray = (recipe.strTags || '')
+        .split(',').filter((tag: string) => tag.trim());
+
       setRecipeDetails({
         id,
         nationality: recipe.strArea || '',
-        title: recipe.strMeal || recipe.strDrink,
+        title: getRecipeProperty(recipe, 'strMeal', 'strDrink'),
         category: isMeal
-          ? recipe.strCategory : `${recipe.strCategory} - ${recipe.strAlcoholic}`,
-        // category: recipe.strCategory || '',
-        image: recipe.strMealThumb || recipe.strDrinkThumb,
+          ? recipe.strCategory
+          : `${recipe.strCategory} - ${recipe.strAlcoholic}`,
+        image: getRecipeProperty(recipe, 'strMealThumb', 'strDrinkThumb'),
         ingredients,
         isAlcoholicOrNot: recipe.strAlcoholic || '',
         tags: tagsArray,
       });
-      if (!id) return;
+
       const progress = getRecipeProgress(id, isMeal);
       setCheckedIngredients(progress);
     }
+
     fetchRecipeDetails();
-  }, [id, location, isMeal]);
+  }, [id, isMeal]);
 
   function handleShareClick() {
     let recipeLink = window.location.href;
