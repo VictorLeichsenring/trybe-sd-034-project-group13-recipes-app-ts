@@ -3,6 +3,7 @@ import './RecipeDetails.css';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
 import useRecipeDetails from '../../hooks/useRecipeDetails';
+import { useLocation } from 'react-router-dom';
 
 function RecipeDetails() {
   const {

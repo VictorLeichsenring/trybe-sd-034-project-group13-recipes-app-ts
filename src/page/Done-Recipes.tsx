@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getFromLocalStorage } from '../services/localStorageUtils';
 
 function DoneRecipes() {
   const doneRecipes = getFromLocalStorage('doneRecipes', []); // Obtenha as receitas feitas do localStorage
+  const [copyMessage, setCopyMessage] = useState('');
+
+  function handleShareClickDone(type, id) {
+    const recipeUrl = `http://localhost:3000/${type}s/${id}`;
+    navigator.clipboard.writeText(recipeUrl);
+    setCopyMessage('Link copied!');
+  }
 
   return (
     <div>
@@ -49,7 +56,9 @@ function DoneRecipes() {
                 </span>
               ))}
             </div>
-            <button>
+            <button
+              onClick={ () => handleShareClickDone(recipe.type, recipe.id) }
+            >
               <img
                 src="src/images/shareIcon.svg"
                 alt="Share Icon"
@@ -59,6 +68,7 @@ function DoneRecipes() {
           </div>
         ))}
       </div>
+      {copyMessage && <div>{copyMessage}</div>}
     </div>
   );
 }
