@@ -1,23 +1,11 @@
-import React, { useState } from 'react';
-import { getFromLocalStorage } from '../services/localStorageUtils';
+import { useDoneRecipes, Recipe } from '../hooks/useDoneRecipes';
 
 function DoneRecipes() {
-  const doneRecipes = getFromLocalStorage('doneRecipes', []); // Obtenha as receitas feitas do localStorage
-  const [copyMessage, setCopyMessage] = useState('');
-
-  // filtros para a 48,
-  const meals = doneRecipes.filter((recipe) => recipe.type === 'meal');
-  const drink = doneRecipes.filter((recipe) => recipe.type === 'drink');
-
-  console.log(meals);
-
-  console.log(drink);
-
-  function handleShareClickDone(type, id) {
-    const recipeUrl = `http://localhost:3000/${type}s/${id}`;
-    navigator.clipboard.writeText(recipeUrl);
-    setCopyMessage('Link copied!');
-  }
+  const {
+    doneRecipes,
+    copyMessage,
+    handleShareClickDone,
+  } = useDoneRecipes();
 
   return (
     <div>
@@ -38,7 +26,7 @@ function DoneRecipes() {
         Drinks
       </button>
       <div>
-        {doneRecipes.map((recipe, index) => (
+        {doneRecipes.map((recipe: Recipe, index:number) => (
           <div key={ index } data-testid={ `${index}-recipe-card` }>
             <img
               src={ recipe.image }
