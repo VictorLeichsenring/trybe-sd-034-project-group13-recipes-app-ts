@@ -5,6 +5,7 @@ function FavoriteRecipes() {
   const {
     filterRecipes,
     filteredRecipes,
+    handleShareClick,
   } = useFavoriteRecipes();
   return (
     <div>
@@ -18,7 +19,6 @@ function FavoriteRecipes() {
       <button data-testid="filter-by-drink-btn" onClick={ () => filterRecipes('drink') }>
         Drinks
       </button>
-
       <div>
         {filteredRecipes.map((recipe:Recipe, index:number) => (
           <div key={ index } data-testid={ `${index}-recipe-card` }>
@@ -34,11 +34,19 @@ function FavoriteRecipes() {
               {recipe.type === 'drink' && <span>{recipe.alcoholicOrNot}</span>}
             </p>
             <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
-            <button data-testid={ `${index}-horizontal-share-btn` }>
-              Compartilhar
+            <button>
+              <img
+                src="src/images/shareIcon.svg"
+                alt="Share Icon"
+                data-testid={ `${index}-horizontal-share-btn` }
+              />
             </button>
-            <button data-testid={ `${index}-horizontal-favorite-btn` }>
-              Favorito
+            <button>
+              <img
+                src="src/images/blackHeartIcon.svg"
+                alt="Share Icon"
+                data-testid={ `${index}-horizontal-favorite-btn` }
+              />
             </button>
           </div>
         ))}

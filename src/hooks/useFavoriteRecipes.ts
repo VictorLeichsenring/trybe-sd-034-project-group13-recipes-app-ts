@@ -20,10 +20,17 @@ function useFavoriteRecipes() {
     }
   }
 
+  function handleShareClick(recipe: Recipe) {
+    const recipeUrl = `http://localhost:3000/${recipe.type}s/${recipe.id}`;
+    navigator.clipboard.writeText(recipeUrl);
+    alert('Link copied!');
+  }
+
   return {
     favoriteRecipes,
     filteredRecipes,
     filterRecipes,
+    handleShareClick,
   };
 }
 
