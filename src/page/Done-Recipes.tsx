@@ -5,6 +5,14 @@ function DoneRecipes() {
   const doneRecipes = getFromLocalStorage('doneRecipes', []); // Obtenha as receitas feitas do localStorage
   const [copyMessage, setCopyMessage] = useState('');
 
+  // filtros para a 48,
+  const meals = doneRecipes.filter((recipe) => recipe.type === 'meal');
+  const drink = doneRecipes.filter((recipe) => recipe.type === 'drink');
+
+  console.log(meals);
+
+  console.log(drink);
+
   function handleShareClickDone(type, id) {
     const recipeUrl = `http://localhost:3000/${type}s/${id}`;
     navigator.clipboard.writeText(recipeUrl);
@@ -69,6 +77,9 @@ function DoneRecipes() {
         ))}
       </div>
       {copyMessage && <div>{copyMessage}</div>}
+      <button>Meals</button>
+      <button>Drinks</button>
+      <button>All</button>
     </div>
   );
 }
