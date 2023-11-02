@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getFromLocalStorage } from '../services/localStorageUtils';
 
 export type Recipe = {
@@ -14,6 +15,7 @@ export type Recipe = {
 };
 
 export function useDoneRecipes() {
+  const navigate = useNavigate();
   const doneRecipes = getFromLocalStorage('doneRecipes', []); // Obtenha as receitas feitas do localStorage
   const [copyMessage, setCopyMessage] = useState('');
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(doneRecipes);
@@ -40,6 +42,9 @@ export function useDoneRecipes() {
       setFilteredRecipes(doneRecipes);
     }
   }
+  function handleRecipeClick(type: 'meal' | 'drink', id: string) {
+    navigate(`/${type}s/${id}`);
+  }
 
   return {
     doneRecipes,
@@ -49,5 +54,6 @@ export function useDoneRecipes() {
     handleShareClickDone,
     filterRecipes,
     filteredRecipes,
+    handleRecipeClick,
   };
 }

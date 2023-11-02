@@ -6,6 +6,7 @@ function DoneRecipes() {
     handleShareClickDone,
     filterRecipes,
     filteredRecipes,
+    handleRecipeClick,
   } = useDoneRecipes();
 
   return (
@@ -31,13 +32,28 @@ function DoneRecipes() {
       </button>
       <div>
         {filteredRecipes.map((recipe: Recipe, index:number) => (
-          <div key={ index } data-testid={ `${index}-recipe-card` }>
-            <img
-              src={ recipe.image }
-              alt={ recipe.name }
-              data-testid={ `${index}-horizontal-image` }
-              width={ 200 }
-            />
+          <div
+            key={ index }
+            data-testid={ `${index}-recipe-card` }
+          >
+            <button
+              onClick={ () => handleRecipeClick(recipe.type, recipe.id) }
+              onKeyDown={ (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  handleRecipeClick(recipe.type, recipe.id);
+                }
+              } }
+              role="link"
+              tabIndex={ 0 }
+              style={ { border: 'none', background: 'transparent' } }
+            >
+              <img
+                src={ recipe.image }
+                alt={ recipe.name }
+                data-testid={ `${index}-horizontal-image` }
+                width={ 200 }
+              />
+            </button>
             <p data-testid={ `${index}-horizontal-top-text` }>
               {recipe.nationality}
               {' '}
@@ -47,7 +63,21 @@ function DoneRecipes() {
               {' '}
               {recipe.type === 'drink' && <span>{recipe.alcoholicOrNot}</span>}
             </p>
-            <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
+            <button
+              onClick={ () => handleRecipeClick(recipe.type, recipe.id) }
+              onKeyDown={ (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  handleRecipeClick(recipe.type, recipe.id);
+                }
+              } }
+              role="link"
+              tabIndex={ 0 }
+              style={ { border: 'none', background: 'transparent' } }
+            >
+              <p data-testid={ `${index}-horizontal-name` }>
+                {recipe.name}
+              </p>
+            </button>
             <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
             <div>
               {recipe.tags.map((tag, tagIndex) => (
