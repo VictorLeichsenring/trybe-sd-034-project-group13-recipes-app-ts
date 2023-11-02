@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Recipe } from './useDoneRecipes';
 import { getFromLocalStorage, setToLocalStorage } from '../services/localStorageUtils';
 
 function useFavoriteRecipes() {
+  const navigate = useNavigate();
   const favoriteRecipes = getFromLocalStorage('favoriteRecipes', []);
   const [filteredRecipes, setFilteredRecipes] = useState(favoriteRecipes);
   const [copyMessage, setCopyMessage] = useState('');
@@ -33,6 +35,10 @@ function useFavoriteRecipes() {
     setFilteredRecipes(updatedFavorites);
   }
 
+  function handleRecipeClick(type: 'meal' | 'drink', id: string) {
+    navigate(`/${type}s/${id}`);
+  }
+
   return {
     favoriteRecipes,
     filteredRecipes,
@@ -40,6 +46,7 @@ function useFavoriteRecipes() {
     handleShareClick,
     copyMessage,
     unfavoriteRecipe,
+    handleRecipeClick,
   };
 }
 

@@ -9,6 +9,7 @@ function FavoriteRecipes() {
     handleShareClick,
     copyMessage,
     unfavoriteRecipe,
+    handleRecipeClick,
   } = useFavoriteRecipes();
   return (
     <div className="favorite-recipes-container">
@@ -25,18 +26,44 @@ function FavoriteRecipes() {
       <div>
         {filteredRecipes.map((recipe:Recipe, index:number) => (
           <div key={ index } data-testid={ `${index}-recipe-card` }>
-            <img
-              src={ recipe.image }
-              alt={ recipe.name }
-              data-testid={ `${index}-horizontal-image` }
-              width={ 200 }
-            />
+            <button
+              onClick={ () => handleRecipeClick(recipe.type, recipe.id) }
+              onKeyDown={ (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  handleRecipeClick(recipe.type, recipe.id);
+                }
+              } }
+              role="link"
+              tabIndex={ 0 }
+              style={ { border: 'none', background: 'transparent' } }
+            >
+              <img
+                src={ recipe.image }
+                alt={ recipe.name }
+                data-testid={ `${index}-horizontal-image` }
+                width={ 200 }
+              />
+            </button>
             <p data-testid={ `${index}-horizontal-top-text` }>
               {recipe.nationality && `${recipe.nationality} - `}
               {recipe.category}
               {recipe.type === 'drink' && <span>{recipe.alcoholicOrNot}</span>}
             </p>
-            <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
+            <button
+              onClick={ () => handleRecipeClick(recipe.type, recipe.id) }
+              onKeyDown={ (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  handleRecipeClick(recipe.type, recipe.id);
+                }
+              } }
+              role="link"
+              tabIndex={ 0 }
+              style={ { border: 'none', background: 'transparent' } }
+            >
+              <p data-testid={ `${index}-horizontal-name` }>
+                {recipe.name}
+              </p>
+            </button>
             <button
               onClick={ () => handleShareClick(recipe.type, recipe.id) }
             >
