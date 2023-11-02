@@ -6,6 +6,7 @@ function FavoriteRecipes() {
     filterRecipes,
     filteredRecipes,
     handleShareClick,
+    copyMessage,
   } = useFavoriteRecipes();
   return (
     <div>
@@ -34,13 +35,16 @@ function FavoriteRecipes() {
               {recipe.type === 'drink' && <span>{recipe.alcoholicOrNot}</span>}
             </p>
             <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
-            <button>
+            <button
+              onClick={ () => handleShareClick(recipe.type, recipe.id) }
+            >
               <img
                 src="src/images/shareIcon.svg"
                 alt="Share Icon"
                 data-testid={ `${index}-horizontal-share-btn` }
               />
             </button>
+            {copyMessage && <div>{copyMessage}</div>}
             <button>
               <img
                 src="src/images/blackHeartIcon.svg"

@@ -5,6 +5,7 @@ import { getFromLocalStorage } from '../services/localStorageUtils';
 function useFavoriteRecipes() {
   const favoriteRecipes = getFromLocalStorage('favoriteRecipes', []);
   const [filteredRecipes, setFilteredRecipes] = useState(favoriteRecipes);
+  const [copyMessage, setCopyMessage] = useState('');
 
   function filterRecipes(type: 'meal' | 'drink' | 'all') {
     if (type === 'meal') {
@@ -20,10 +21,10 @@ function useFavoriteRecipes() {
     }
   }
 
-  function handleShareClick(recipe: Recipe) {
-    const recipeUrl = `http://localhost:3000/${recipe.type}s/${recipe.id}`;
+  function handleShareClick(type: 'meal' | 'drink', id: string) {
+    const recipeUrl = `http://localhost:3000/${type}s/${id}`;
     navigator.clipboard.writeText(recipeUrl);
-    alert('Link copied!');
+    setCopyMessage('Link copied!');
   }
 
   return {
@@ -31,6 +32,7 @@ function useFavoriteRecipes() {
     filteredRecipes,
     filterRecipes,
     handleShareClick,
+    copyMessage,
   };
 }
 
