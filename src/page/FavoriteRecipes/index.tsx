@@ -1,5 +1,6 @@
-import { Recipe } from '../hooks/useDoneRecipes';
-import useFavoriteRecipes from '../hooks/useFavoriteRecipes';
+import { Recipe } from '../../hooks/useDoneRecipes';
+import useFavoriteRecipes from '../../hooks/useFavoriteRecipes';
+import './FavoriteRecipes.css';
 
 function FavoriteRecipes() {
   const {
@@ -7,9 +8,10 @@ function FavoriteRecipes() {
     filteredRecipes,
     handleShareClick,
     copyMessage,
+    unfavoriteRecipe,
   } = useFavoriteRecipes();
   return (
-    <div>
+    <div className="favorite-recipes-container">
       <h1>Receitas Favoritas</h1>
       <button data-testid="filter-by-all-btn" onClick={ () => filterRecipes('all') }>
         All
@@ -45,10 +47,12 @@ function FavoriteRecipes() {
               />
             </button>
             {copyMessage && <div>{copyMessage}</div>}
-            <button>
+            <button
+              onClick={ () => unfavoriteRecipe(recipe.id) }
+            >
               <img
                 src="src/images/blackHeartIcon.svg"
-                alt="Share Icon"
+                alt="Favorite Icon"
                 data-testid={ `${index}-horizontal-favorite-btn` }
               />
             </button>

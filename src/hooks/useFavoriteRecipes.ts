@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Recipe } from './useDoneRecipes';
-import { getFromLocalStorage } from '../services/localStorageUtils';
+import { getFromLocalStorage, setToLocalStorage } from '../services/localStorageUtils';
 
 function useFavoriteRecipes() {
   const favoriteRecipes = getFromLocalStorage('favoriteRecipes', []);
@@ -27,12 +27,19 @@ function useFavoriteRecipes() {
     setCopyMessage('Link copied!');
   }
 
+  function unfavoriteRecipe(id: string) {
+    const updatedFavorites = favoriteRecipes.filter((recipe:Recipe) => recipe.id !== id);
+    setToLocalStorage('favoriteRecipes', updatedFavorites);
+    setFilteredRecipes(updatedFavorites);
+  }
+
   return {
     favoriteRecipes,
     filteredRecipes,
     filterRecipes,
     handleShareClick,
     copyMessage,
+    unfavoriteRecipe,
   };
 }
 

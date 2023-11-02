@@ -8,7 +8,7 @@ import Profile from './page/Profile';
 import Drinks from './page/Drinks';
 import Layout from './components/Layout';
 import DoneRecipes from './page/Done-Recipes';
-import FavoriteRecipes from './page/Favorite-Recipes';
+import FavoriteRecipes from './page/FavoriteRecipes';
 import RecipeDetails from './page/RecipeDetails';
 import RecipeInProgress from './page/RecipeInProgress';
 
