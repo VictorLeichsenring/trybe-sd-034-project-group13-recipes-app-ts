@@ -16,10 +16,11 @@ export type Recipe = {
 export function useDoneRecipes() {
   const doneRecipes = getFromLocalStorage('doneRecipes', []); // Obtenha as receitas feitas do localStorage
   const [copyMessage, setCopyMessage] = useState('');
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(doneRecipes);
 
   // filtros para a 48,
   const meals = doneRecipes.filter((recipe:Recipe) => recipe.type === 'meal');
-  const drink = doneRecipes.filter((recipe:Recipe) => recipe.type === 'drink');
+  const drinks = doneRecipes.filter((recipe:Recipe) => recipe.type === 'drink');
 
   function handleShareClickDone(type: 'meal' | 'drink', id: string) {
     const recipeUrl = `http://localhost:3000/${type}s/${id}`;
@@ -27,11 +28,26 @@ export function useDoneRecipes() {
     setCopyMessage('Link copied!');
   }
 
+  function filterRecipes(type: 'meal' | 'drink' | 'all') {
+    if (type === 'meal') {
+      console.log('meal', meals);
+      setFilteredRecipes(meals);
+    } else if (type === 'drink') {
+      console.log('drink', drinks);
+      setFilteredRecipes(drinks);
+    } else {
+      console.log('all', doneRecipes);
+      setFilteredRecipes(doneRecipes);
+    }
+  }
+
   return {
     doneRecipes,
     meals,
-    drink,
+    drinks,
     copyMessage,
     handleShareClickDone,
+    filterRecipes,
+    filteredRecipes,
   };
 }

@@ -2,9 +2,10 @@ import { useDoneRecipes, Recipe } from '../hooks/useDoneRecipes';
 
 function DoneRecipes() {
   const {
-    doneRecipes,
     copyMessage,
     handleShareClickDone,
+    filterRecipes,
+    filteredRecipes,
   } = useDoneRecipes();
 
   return (
@@ -12,21 +13,24 @@ function DoneRecipes() {
       <h1>Receitas Feitas</h1>
       <button
         data-testid="filter-by-all-btn"
+        onClick={ () => filterRecipes('all') }
       >
         All
       </button>
       <button
         data-testid="filter-by-meal-btn"
+        onClick={ () => filterRecipes('meal') }
       >
         Meals
       </button>
       <button
         data-testid="filter-by-drink-btn"
+        onClick={ () => filterRecipes('drink') }
       >
         Drinks
       </button>
       <div>
-        {doneRecipes.map((recipe: Recipe, index:number) => (
+        {filteredRecipes.map((recipe: Recipe, index:number) => (
           <div key={ index } data-testid={ `${index}-recipe-card` }>
             <img
               src={ recipe.image }
@@ -65,9 +69,6 @@ function DoneRecipes() {
         ))}
       </div>
       {copyMessage && <div>{copyMessage}</div>}
-      <button>Meals</button>
-      <button>Drinks</button>
-      <button>All</button>
     </div>
   );
 }
