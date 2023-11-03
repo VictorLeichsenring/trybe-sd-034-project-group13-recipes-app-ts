@@ -86,3 +86,4 @@ describe('Test SearchBar Componet', () => {
     expect(filterButton).toBeInTheDocument();
   });
 });
+//----
