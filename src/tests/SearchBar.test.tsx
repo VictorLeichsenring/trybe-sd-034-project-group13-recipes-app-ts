@@ -3,6 +3,7 @@ import SearchBar from '../components/SearchBar';
 import renderWithRouter from '../helpers/renderWithRouter';
 import '@testing-library/jest-dom/extend-expect';
 
+// comentario test
 describe('Test SearchBar Componet', () => {
   test('testa o componente search-bar na rota meals', async () => {
     const { user } = renderWithRouter(<SearchBar />, { route: '/meals' });
