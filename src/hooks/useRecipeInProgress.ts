@@ -95,12 +95,15 @@ function useRecipeInProgress() {
       if (!id) return;
 
       const endpoint = getEndpoint();
+
       const data = await fetchData(endpoint);
+
       const recipe = data.meals?.[0] || data.drinks?.[0];
 
       if (!recipe) return;
 
       const ingredients = extractIngredients(recipe);
+
       const tagsArray = (recipe.strTags || '')
         .split(',').filter((tag: string) => tag.trim());
 

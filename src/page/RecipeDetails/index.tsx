@@ -112,6 +112,7 @@ function RecipeDetails() {
             <button
               className="start-recipe-btn"
               data-testid="start-recipe-btn"
+              onClick={ handleStartRecipe }
             >
               Continue Recipe
             </button>

@@ -34,7 +34,7 @@ function Login() {
   const Validate = emailValidate && passwordValidate;
 
   return (
-    <div>
+    <div className="login-container">
       <form>
         <h2>Login</h2>
         <input

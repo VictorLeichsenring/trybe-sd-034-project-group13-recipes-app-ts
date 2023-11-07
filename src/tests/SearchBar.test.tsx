@@ -1,89 +1,47 @@
-import userEvent from '@testing-library/user-event';
-import { fireEvent } from '@testing-library/dom';
+import { screen } from '@testing-library/dom';
 import SearchBar from '../components/SearchBar';
 import renderWithRouter from '../helpers/renderWithRouter';
 import '@testing-library/jest-dom/extend-expect';
 
 describe('Test SearchBar Componet', () => {
   test('testa o componente search-bar na rota meals', async () => {
-    const { getByTestId } = renderWithRouter(<SearchBar />, { route: '/meals' });
-    const user = userEvent;
+    const { user } = renderWithRouter(<SearchBar />, { route: '/meals' });
 
-    const searchInput = getByTestId('search-input');
-    await user.type(searchInput, 'teste');
+    const searchInput = screen.getByTestId('search-input');
     expect(searchInput).toBeInTheDocument();
 
-    const radioIngredient = getByTestId('ingredient-search-radio');
+    const radioIngredient = screen.getByTestId('ingredient-search-radio');
     expect(radioIngredient).toBeInTheDocument();
 
-    const radioName = getByTestId('name-search-radio');
+    const radioName = screen.getByTestId('name-search-radio');
     expect(radioName).toBeInTheDocument();
 
-    const radioFirstLetter = getByTestId('first-letter-search-radio');
+    const radioFirstLetter = screen.getByTestId('first-letter-search-radio');
     expect(radioFirstLetter).toBeInTheDocument();
 
-    const btnSearchBar = getByTestId('exec-search-btn');
-    await user.click(btnSearchBar);
+    const btnSearchBar = screen.getByTestId('exec-search-btn');
     expect(btnSearchBar).toBeInTheDocument();
 
-    const inputCampo = document.getElementById('inputCampo');
-    expect(inputCampo?.getAttribute('placeholder')).toBe('pesquisa');
-    fireEvent.change(searchInput, { target: { value: 'rice' } });
-
-    // const endpoint = getByDisplayValue('https://www.themealdb.com/api/json/v1/1/search.php?s=teste');
-
-    // const btnIngredient = getByRole('radio', { name: /ingredient/i });
-    // await user.click(btnIngredient);
-    // expect(btnIngredient).toBeInTheDocument();
-
-    // const btnName = getByRole('radio', { name: /name/i });
-    // await user.click(btnName);
-    // expect(btnName).toBeInTheDocument();
-
-  // const filterButton = getByRole('button', { name: 'Buscar' });
-  // await user.click(filterButton);
-  // expect(filterButton).toBeInTheDocument();
-  });
-
-  test('testa o componente search-bar na rota drinks', async () => {
-    const { getByRole, getByTestId } = renderWithRouter(<SearchBar />, { route: '/drinks' });
-    const user = userEvent;
-
-    const btnIngredient = getByRole('radio', { name: /ingredient/i });
-    await user.click(btnIngredient);
-    expect(btnIngredient).toBeInTheDocument();
-
-    const btnName = getByRole('radio', { name: /name/i });
-    await user.click(btnName);
-    expect(btnName).toBeInTheDocument();
-
-    const btnFirstLetter = getByRole('radio', { name: /first letter/i });
-    await user.click(btnFirstLetter);
-    expect(btnFirstLetter).toBeInTheDocument();
-
-    const searchInput = getByTestId('search-input');
+    // Simula a digitação no campo de pesquisa
     await user.type(searchInput, 'teste');
-    expect(searchInput).toBeInTheDocument();
+    expect(searchInput).toHaveValue('teste');
 
-    fireEvent.change(searchInput, { target: { value: 'water' } });
+    // Verifica se o placeholder do input está correto
+    expect(searchInput).toHaveAttribute('placeholder', 'pesquisa');
 
-    // const radioIngredient = getByTestId('ingredient-search-radio');
-    // expect(radioIngredient).toBeInTheDocument();
-    // await user.deselectOptions(radioIngredient, 'ingredient');
+    // Clica no rádio button de ingrediente
+    await user.click(radioIngredient);
+    expect(radioIngredient).toBeChecked();
 
-    // const radioName = getByTestId('name-search-radio');
-    // expect(radioName).toBeInTheDocument();
+    // Clica no rádio button de nome
+    await user.click(radioName);
+    expect(radioName).toBeChecked();
 
-    // const radioFirstLetter = getByTestId('first-letter-search-radio');
-    // expect(radioFirstLetter).toBeInTheDocument();
+    // Clica no rádio button da primeira letra
+    await user.click(radioFirstLetter);
+    expect(radioFirstLetter).toBeChecked();
 
-    const btnSearchBar = getByTestId('exec-search-btn');
+    // Clica no botão de busca
     await user.click(btnSearchBar);
-    expect(btnSearchBar).toBeInTheDocument();
-
-    const filterButton = getByRole('button', { name: 'Buscar' });
-    await user.click(filterButton);
-    expect(filterButton).toBeInTheDocument();
   });
 });
-//----
