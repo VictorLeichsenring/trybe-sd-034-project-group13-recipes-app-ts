@@ -23,6 +23,7 @@ beforeEach(() => {
 });
 
 describe('RecipeInProgress', () => {
+  const inputCheckbox = 'input[type="checkbox"]';
   test('fetch data', async () => {
     const MOCK_DATA = {
       meals: [{
@@ -70,8 +71,8 @@ describe('RecipeInProgress', () => {
     const secondIngredientItem = await screen.findByTestId('1-ingredient-step');
 
     // Encontra os inputs de checkbox dentro dos elementos LI
-    const firstIngredientCheckbox = firstIngredientItem.querySelector('input[type="checkbox"]');
-    const secondIngredientCheckbox = secondIngredientItem.querySelector('input[type="checkbox"]');
+    const firstIngredientCheckbox = firstIngredientItem.querySelector(inputCheckbox);
+    const secondIngredientCheckbox = secondIngredientItem.querySelector(inputCheckbox);
 
     // Verifique se os checkboxes estão inicialmente desmarcados
     expect(firstIngredientCheckbox).not.toBeChecked();
@@ -143,9 +144,9 @@ describe('RecipeInProgress', () => {
     const thirdIngredientItem = await screen.findByTestId('2-ingredient-step');
 
     // Encontra os inputs de checkbox dentro dos elementos LI
-    const firstIngredientCheckbox = firstIngredientItem.querySelector('input[type="checkbox"]');
-    const secondIngredientCheckbox = secondIngredientItem.querySelector('input[type="checkbox"]');
-    const thirdIngredientCheckbox = thirdIngredientItem.querySelector('input[type="checkbox"]');
+    const firstIngredientCheckbox = firstIngredientItem.querySelector(inputCheckbox);
+    const secondIngredientCheckbox = secondIngredientItem.querySelector(inputCheckbox);
+    const thirdIngredientCheckbox = thirdIngredientItem.querySelector(inputCheckbox);
 
     // Verifique se os checkboxes estão inicialmente desmarcados
     expect(firstIngredientCheckbox).not.toBeChecked();
