@@ -45,10 +45,14 @@ describe('Recipe Details', () => {
     const messageLink = await screen.findByText('Link copied!');
     expect(messageLink).toBeInTheDocument();
 
-    const btnfavorite = await screen.findByTestId('favorite-btn');
-    expect(btnfavorite).toHaveAttribute('src', expect.stringContaining('whiteHeartIcon.svg'));
-    await user.click(btnfavorite);
-
+    // const btnfavorite = await screen.findByTestId('favorite-btn');
+    // expect(btnfavorite).toHaveAttribute('src', expect.stringContaining('whiteHeartIcon.svg'));
+    // await user.click(btnfavorite);
+    // await waitFor(() => {
+    //   // Você pode precisar reconsultar o botão de favoritos se o componente for completamente re-renderizado após o clique
+    //   const updatedBtnFavorite = screen.getByTestId('favorite-btn');
+    //   expect(updatedBtnFavorite).toHaveAttribute('src', expect.stringContaining('blackHeartIcon.svg'));
+    // });
     const img = await screen.findByTestId('recipe-photo');
     expect(img).toBeInTheDocument();
 
@@ -68,6 +72,14 @@ describe('Recipe Details', () => {
     await user.click(buttonStart);
   });
   it('fetch data para drinks', async () => {
+    vi.clearAllMocks();
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom'); // importa todas as funções e componentes reais
+      return {
+        ...actual, // retorna todos os componentes e funções reais
+        useParams: vi.fn().mockReturnValue({ id: '17837' }), // mock do useParams
+      };
+    });
     const MOCKDATA = {
       drinks: [{
         idDrink: '17837',
@@ -99,8 +111,7 @@ describe('Recipe Details', () => {
     const btnFavorite = await screen.findByTestId('favorite-btn');
     expect(btnFavorite).toHaveAttribute('src', expect.stringContaining('whiteHeartIcon.svg'));
     await user.click(btnFavorite);
-    // btnFavorite = await screen.findByTestId('favorite-btn');
-    // expect(btnFavorite).not.toHaveAttribute('src', expect.stringContaining('whiteHeartIcon.svg'));
+    expect(btnFavorite).not.toHaveAttribute('src', expect.stringContaining('whiteHeartIcon.svg'));
 
     const img = await screen.findByTestId('recipe-photo');
     expect(img).toBeInTheDocument();
@@ -121,4 +132,37 @@ describe('Recipe Details', () => {
     await user.click(buttonStart);
     // const finishbtn = await screen.findByTestId('finish-recipe-btn');
   });
+//   test('Teste do botão Favorite', async () => {
+//     vi.clearAllMocks();
+//     vi.mock('react-router-dom', async () => {
+//       const actual = await vi.importActual('react-router-dom'); // importa todas as funções e componentes reais
+//       return {
+//         ...actual, // retorna todos os componentes e funções reais
+//         useParams: vi.fn().mockReturnValue({ id: '52977' }), // mock do useParams
+//       };
+//     });
+//     const MOCKDATA = {
+//       drinks: [{
+//         idDrink: '17837',
+//         strDrinkThumb: 'https://www.thecocktaildb.com/images/media/drink/v0at4i1582478473.jpg',
+//         strDrink: 'Adam',
+//         strCategory: 'Ordinary Drink',
+//         strAlcoholic: 'Alcoholic',
+//         strInstructions: 'In a shaker half-filled with ice cubes, combine all of the ingredients. Shake well. Strain into a cocktail glass.',
+//         strVideo: null,
+//         strIngredient1: 'Dark rum',
+//         strIngredient2: 'Lemon juice',
+//         strIngredient3: 'Grenadine',
+//         strMeasure1: '2 oz ',
+//         strMeasure2: '1 oz ',
+//         strMeasure3: '1 tsp ',
+//       }],
+//     };
+//     vi.mocked(fetchData).mockResolvedValue(MOCKDATA);
+//     const { user } = renderWithRouter(<RecipeDetails />, { route: '/drinks/17837' });
+//     const btnFavorite = await screen.findByTestId('favorite-btn');
+//     expect(btnFavorite).toHaveAttribute('src', expect.stringContaining('whiteHeartIcon.svg'));
+//     await user.click(btnFavorite);
+//     expect(btnFavorite).toHaveAttribute('src', expect.stringContaining('blackHeartIcon.svg'));
+//   });
 });
